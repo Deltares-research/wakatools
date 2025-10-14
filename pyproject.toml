@@ -1,0 +1,108 @@
+[project]
+authors = [{name = "smknaake", email = "bas.knaake@deltares.nl"}]
+description = "Tools for channel-bottom analysis and classification."
+dynamic = ["version"]
+license = {file = "LICENSE"}
+keywords = [
+  "Channel bottoms",
+  "River morphology",
+  "Deltares",
+]
+dependencies = [
+]
+name = "wakatools"
+classifiers = [
+    "Development Status :: 2 - Pre-Alpha",
+    "Intended Audience :: Science/Research",
+	"Topic :: Scientific/Engineering",
+	"License :: OSI Approved :: MIT License",
+	"Operating System :: OS Independent",
+	"Programming Language :: Python",
+	"Programming Language :: Python :: 3.12",
+]
+requires-python = ">= 3.12"
+
+[build-system]
+build-backend = "hatchling.build"
+requires = ["hatchling"]
+
+[tool.hatch.version]
+path = "src/wakatools/__init__.py"
+
+[tool.hatch.build.targets.sdist]
+only-include = ["src/wakatools", "tests"]
+
+[tool.pixi.workspace]
+channels = ["conda-forge"]
+platforms = ["win-64"]
+
+[tool.pixi.pypi-dependencies]
+wakatools = { path = ".", editable = true }
+
+[tool.pixi.tasks]
+test = "python -m pytest --verbose --cov=wakatools --cov-report xml --cov-report term"
+test-local = "pytest -v --cov"
+format = "black ."
+lint = "ruff check --fix ./src/wakatools"
+build-docs = "sphinx-build -b html docs ./docs/build"
+rm-build = "rm -r ./docs/build"
+rebuild-docs = { depends-on = ["rm-build", "build-docs"] }
+
+[tool.pixi.dependencies]
+python = ">=3.12"
+pip = "*"
+numpy = "*"
+scipy = "*"
+pandas = "*"
+geopandas = "*"
+rioxarray = "*"
+xarray = "*"
+shapely = "*"
+black = "*"
+pytest = "*"
+pytest-cov = "*"
+ruff = "*"
+sphinx = "*"
+myst-parser = "*"
+pydata-sphinx-theme = "*"
+sphinx-design = "*"
+myst-nb = "*"
+
+
+[tool.pixi.feature.py312.dependencies]
+python = "3.12.*"
+
+[tool.pixi.feature.py313.dependencies]
+python = "3.13.*"
+
+[tool.pixi.environments]
+default = { features = ["py313"], solve-group = "py313" }
+py312 = { features = ["py312"], solve-group = "py312" }
+py313 = { features = ["py313"], solve-group = "py313" }
+
+[tool.pytest.ini_options]
+testpaths = [
+    "tests",
+]
+markers = [
+	"unittest: test of single component",
+	"integrationtest: test of multiple components",
+]
+
+[tool.coverage.report]
+exclude_lines = [
+  "pragma: no cover",
+]
+
+[tool.black]
+line-length = 88
+
+[tool.ruff]
+line-length = 88
+target-version = "py313"
+
+[tool.ruff.lint]
+select = ["F", "E", "W", "N", "I001", "NPY201"]
+ignore = ["F401", "E501", "F811"]
+unfixable = ["F401"]
+pydocstyle.convention = "numpy"
