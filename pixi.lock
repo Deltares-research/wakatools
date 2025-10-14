@@ -4180,7 +4180,7 @@ packages:
 - pypi: ./
   name: wakatools
   version: 0.1.0
-  sha256: 39c1292bbf1d9dde3bca26a261063f1350a88a4d9cf1973c741fdd14c6b7e36a
+  sha256: 3d910d053f29546476cf681467e879af01bebdd5de3b6c6e57f90f9f5dfb3b97
   requires_python: '>=3.12'
   editable: true
 - conda: https://conda.anaconda.org/conda-forge/noarch/wcwidth-0.2.14-pyhd8ed1ab_0.conda
