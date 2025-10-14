@@ -9,7 +9,7 @@ In a Python >= 3.12 environment, install the latest (experimental) version of th
     pip install git+https://github.com/Deltares-research/wakatools.git
 
 ## Installation (developer)
-GeoST uses [Pixi](https://github.com/prefix-dev/pixi) for package management and workflows.
+Wakatools uses [Pixi](https://github.com/prefix-dev/pixi) for package management and workflows.
 
 With pixi installed, navigate to the folder of the cloned repository and run the following to install all dependencies and the package itself in editable mode:
 
