@@ -1,10 +1,11 @@
-import geost
+# import geost
 
 
 def read_seismics(filepath):
     # Read .dat file containing seismic data (x, y, time)
     # Convert time to depth using utility function
-    pass
+    print(f"Reading seismic data from {filepath}")
+    return
 
 
 def read_boreholes(filepath):
