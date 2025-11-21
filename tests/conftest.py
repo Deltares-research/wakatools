@@ -1,19 +1,46 @@
+from pathlib import Path
+
 import numpy as np
 import pandas as pd
 import pytest
+import xarray as xr
 
 
 @pytest.fixture
 def seismic_data():
-    # Pandas DataFrame Sample seismic data fixture
-    return pd.DataFrame({"x": [0, 1, 2], "y": [0, 1, 2], "time": [10, 20, 30]})
+    return pd.DataFrame(
+        {
+            "ID": ["line1", "line1", "line1", "line1", "line1", "line1", "line1"],
+            "x": [0.5, 1.5, 2.5, 3.5, 0.5, 1.5, 2.5],
+            "y": [0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5],
+            "time": [0.0041, 0.0042, 0.0043, 0.0041, 0.0051, 0.0052, 0.0053],
+            "reflector": ["bathy", "bathy", "bathy", "bathy", "bk", "bk", "bk"],
+        }
+    )
 
 
 @pytest.fixture
-def seismic_file(tmp_path, seismic_data):
+def seismic_file(tmp_path: Path, seismic_data: pd.DataFrame):
     filepath = tmp_path / "seismic.dat"
     seismic_data.to_csv(filepath, sep=" ", index=False, header=False)
     return filepath
+
+
+@pytest.fixture
+def bathymetry_grid():
+    x = np.linspace(0, 4, 5)
+    y = np.linspace(0, 4, 5)
+    data = np.array(
+        [
+            [0, 0.1, 0.2, 0.3, 0.4],
+            [0.1, 0.2, 0.3, 0.4, 0.5],
+            [0.2, 0.3, 0.4, 0.5, 0.6],
+            [0.3, 0.4, 0.5, 0.6, 0.7],
+            [0.4, 0.5, 0.6, 0.7, 0.8],
+        ]
+    )
+    bathy_grid = xr.DataArray(data, coords={"x": x, "y": y}, dims=["x", "y"])
+    return bathy_grid
 
 
 def borehole_a():
@@ -25,8 +52,8 @@ def borehole_a():
     return pd.DataFrame(
         {
             "nr": np.full(nlayers, "A"),
-            "x": np.full(nlayers, 2),
-            "y": np.full(nlayers, 3),
+            "x": 4,
+            "y": 2,
             "surface": np.full(nlayers, mv),
             "end": np.full(nlayers, end),
             "top": top,
@@ -45,8 +72,8 @@ def borehole_b():
     return pd.DataFrame(
         {
             "nr": np.full(nlayers, "B"),
-            "x": np.full(nlayers, 1),
-            "y": np.full(nlayers, 4),
+            "x": 2,
+            "y": 1,
             "surface": np.full(nlayers, mv),
             "end": np.full(nlayers, end),
             "top": top,
