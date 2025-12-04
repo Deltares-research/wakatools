@@ -74,9 +74,9 @@ def bathymetry_grid():
 def xyz_dataframe():
     return pd.DataFrame(
         {
-            "x": np.random.uniform(0, 5, 10),
-            "y": np.linspace(-3, 4, 10),
-            "z": np.random.randn(10),
+            "x": [0.3, 1.8, 2.7, 4.9, 0.6, 3.1, 4.4, 2.0, 1.2, 3.8],
+            "y": [3.6, 2.1, 1.7, 4.8, 0.2, 3.4, 2.9, 1.3, 4.1, 0.7],
+            "z": [1.4, 3.9, 0.6, 4.2, 2.8, 1.1, 3.3, 0.4, 4.7, 2.0],
         }
     )
 

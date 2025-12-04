@@ -1,9 +1,10 @@
 import numpy as np
 import pandas as pd
 import pytest
+import rioxarray as rio
 from numpy.testing import assert_array_almost_equal
 
-from wakatools.utils import conversion, scaling
+from wakatools.utils import conversion, scaling, spatial
 
 
 @pytest.mark.parametrize(
@@ -38,13 +39,55 @@ def test_add_depth_column(seismic_data):
     )
 
 
-# @pytest.mark.parametrize(
-#         "value, resolution",
-#         ([1.5, 0.5 ],
-#          [1.6, 0.5],
-#          [1.4, 0.5],
-#          )
-# )
-# def test_round_to_upper(value, resolution)
-# # def test_target_grid_from(xyz_dataframe, resolution):
-# #     grid = target_grid_from(xyz_dataframe, resolution=resolution)
+@pytest.mark.parametrize(
+    "value, resolution, expected",
+    (
+        [1.5, 0.5, 1.5],
+        [1.6, 0.5, 2.0],
+        [1.4, 0.5, 1.5],
+        [1.6, 0.85, 1.7],
+        [2.0, 0.85, 2.55],
+        [1.5, 0.85, 1.7],
+    ),
+)
+def test_round_to_upper(value, resolution, expected):
+    result = spatial.round_to_upper(value, resolution)
+    assert result == expected
+
+
+@pytest.mark.parametrize(
+    "value, resolution, expected",
+    (
+        [1.5, 0.5, 1.5],
+        [1.6, 0.5, 1.5],
+        [1.4, 0.5, 1.0],
+        [1.6, 0.85, 0.85],
+        [2.0, 0.85, 1.7],
+        [1.5, 0.85, 0.85],
+    ),
+)
+def test_round_to_lower(value, resolution, expected):
+    result = spatial.round_to_lower(value, resolution)
+    assert result == expected
+
+
+@pytest.mark.parametrize(
+    "resolution, expected_bounds",
+    [
+        (0.5, (0.0, 0.0, 5.0, 5.0)),
+        (2.0, (0.0, 0.0, 6.0, 6.0)),
+    ],
+)
+def test_target_grid_from(xyz_dataframe, resolution, expected_bounds):
+    grid = spatial.target_grid_from(xyz_dataframe, resolution=resolution)
+
+    assert grid.rio.bounds() == expected_bounds
+    assert grid.rio.resolution() == (resolution, -resolution)
+
+    minx, miny, maxx, maxy = grid.rio.bounds()
+    assert np.all(
+        (xyz_dataframe["x"] >= minx)
+        & (xyz_dataframe["x"] <= maxx)
+        & (xyz_dataframe["y"] >= miny)
+        & (xyz_dataframe["y"] <= maxy)
+    )
