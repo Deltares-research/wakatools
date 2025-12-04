@@ -56,8 +56,8 @@ def seismic_file(tmp_path: Path, seismic_data: pd.DataFrame):
 
 @pytest.fixture
 def bathymetry_grid():
-    x = np.linspace(0, 4, 5)
-    y = np.linspace(0, 4, 5)
+    xcoords = np.arange(5) + 0.5
+    ycoords = np.arange(5, 0, -1) - 0.5
     data = np.array(
         [
             [0, 0.1, 0.2, 0.3, 0.4],
@@ -67,8 +67,7 @@ def bathymetry_grid():
             [0.4, 0.5, 0.6, 0.7, 0.8],
         ]
     )
-    bathy_grid = xr.DataArray(data, coords={"x": x, "y": y}, dims=["x", "y"])
-    return bathy_grid
+    return xr.DataArray(data, coords={"y": ycoords, "x": xcoords}, dims=("y", "x"))
 
 
 def borehole_a():
