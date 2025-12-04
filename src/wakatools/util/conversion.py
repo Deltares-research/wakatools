@@ -2,8 +2,6 @@ import numpy as np
 import pandas as pd
 import shapely
 
-from .constants import SeismicVelocity
-
 
 def calculate_absolute_time(
     line1: shapely.LineString, line2: shapely.LineString
@@ -92,7 +90,3 @@ def add_depth_column(df: pd.DataFrame) -> pd.DataFrame:
     # test if bovenste wel werkt voo rmeer id;s, zo ja doe een if else for nunique
     df["depth"] = time_to_depth(df)
     return df
-
-
-def target_grid_from(xyz: pd.DataFrame):
-    pass
