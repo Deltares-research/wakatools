@@ -39,8 +39,9 @@ def target_grid_from(xyz: pd.DataFrame, resolution: int | float) -> xr.DataArray
         round_to_upper(value, resolution) for value in (xyz["x"].max(), xyz["y"].max())
     ]
 
-    xgrid = np.arange(xmin - (0.5 * resolution), xmax + resolution, resolution)
-    ygrid = np.arange(ymax + (0.5 * resolution), ymin - resolution, -resolution)
+    # Shift xmin and ymax by 0.5 resolution to create cellcenters
+    xgrid = np.arange(xmin + (0.5 * resolution), xmax, resolution)
+    ygrid = np.arange(ymax - (0.5 * resolution), ymin, -resolution)
 
     X, _ = np.meshgrid(xgrid, ygrid)  # noqa: N806
 
