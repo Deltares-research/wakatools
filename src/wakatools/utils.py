@@ -82,10 +82,15 @@ def add_depth_column(df: pd.DataFrame) -> pd.DataFrame:
     pd.DataFrame
         Seismic dataframe with an added 'depth' column.
     """
-    df["depth"] = df.groupby("id", group_keys=False).apply(
-        lambda df: time_to_depth(df), include_groups=False
+    # df["depth"] = (
+    #     df.groupby("ID", group_keys=False).apply(time_to_depth).reset_index(drop=True)
+    # )
+    df["depth"] = df.groupby("ID", group_keys=False).apply(
+        lambda x: time_to_depth(x), include_groups=False
     )
 
+    # test if bovenste wel werkt voo rmeer id;s, zo ja doe een if else for nunique
+    df["depth"] = time_to_depth(df)
     return df
 
 
