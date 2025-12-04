@@ -2,6 +2,8 @@ import numpy as np
 import pandas as pd
 import shapely
 
+from wakatools.constants import SeismicVelocity
+
 
 def calculate_absolute_time(
     line1: shapely.LineString, line2: shapely.LineString
@@ -30,7 +32,7 @@ def calculate_absolute_time(
     )
 
 
-def time_to_depth(df: pd.DataFrame) -> pd.Series:
+def _time_to_depth(df: pd.DataFrame) -> pd.Series:
     """
     Function to convert seismic two-way travel time to depth using a constant
     seismic velocity model.
@@ -60,15 +62,16 @@ def time_to_depth(df: pd.DataFrame) -> pd.Series:
 
         time = calculate_absolute_time(bathy_line, ref_line)
 
-        depth.loc[df["reflector"] == ref] = time * 800
+        depth.loc[df["reflector"] == ref] = time * (SeismicVelocity.SEDIMENT / 2.0)
 
     return depth
 
 
-def add_depth_column(df: pd.DataFrame) -> pd.DataFrame:
+def calculate_depth(df: pd.DataFrame) -> pd.Series:
     """
-    Function to add a depth column to a seismic dataframe by converting
-    two-way travel time to depth using a constant seismic velocity model.
+    Calculate the depth with respect to the bathymetry reflector for deeper reflectors in
+    a Pandas DataFrame containing seismic data. This converts seismic two-way travel time
+    to depth using a constant seismic velocity model.
 
     Parameters
     ----------
@@ -77,15 +80,16 @@ def add_depth_column(df: pd.DataFrame) -> pd.DataFrame:
 
     Returns
     -------
-    pd.DataFrame
-        Seismic dataframe with an added 'depth' column.
+    pd.Series
+        Depth values for bathymetry and reflectors corresponding to the input seismic
+        data.
 
     """
     if df["ID"].nunique() == 1:
-        df["depth"] = time_to_depth(df)
+        depth = _time_to_depth(df)
     else:
-        df["depth"] = df.groupby("ID", group_keys=False).apply(
-            lambda x: time_to_depth(x), include_groups=False
+        depth = df.groupby("ID", group_keys=False).apply(
+            lambda x: _time_to_depth(x), include_groups=False
         )
 
-    return df
+    return depth.fillna(0.0)

@@ -1,1 +1,1 @@
-from .conversion import add_depth_column
+from .conversion import calculate_depth
