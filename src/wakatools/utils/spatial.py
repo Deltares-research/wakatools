@@ -32,12 +32,10 @@ def target_grid_from(xyz: pd.DataFrame, resolution: int | float) -> xr.DataArray
         input points, aligned according to the specified resolution.
 
     """
-    xmin, ymin = [
-        round_to_lower(value, resolution) for value in (xyz["x"].min(), xyz["y"].min())
-    ]
-    xmax, ymax = [
-        round_to_upper(value, resolution) for value in (xyz["x"].max(), xyz["y"].max())
-    ]
+    xmin = round_to_lower(xyz["x"].min(), resolution)
+    ymin = round_to_lower(xyz["y"].min(), resolution)
+    xmax = round_to_upper(xyz["x"].max(), resolution)
+    ymax = round_to_upper(xyz["y"].max(), resolution)
 
     # Shift xmin and ymax by 0.5 resolution to create cellcenters
     xgrid = np.arange(xmin + (0.5 * resolution), xmax, resolution)
