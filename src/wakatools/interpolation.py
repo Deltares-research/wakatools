@@ -12,15 +12,9 @@ import pandas as pd
 import xarray as xr
 
 
-def _calculate_barycentric_coordinates(tri, simplex, points):
-    x = tri.transform[simplex, :2]
-    y = points - tri.transform[simplex, 2]
-    barycentric = np.einsum("ijk,ik->ij", x, y)
-    coordinates = np.c_[barycentric, 1 - barycentric.sum(axis=1)]
-    return coordinates
-
-
-def tin_surface(data: pd.DataFrame, target_grid: xr.DataArray) -> xr.DataArray:
+def tin_surface(
+    data: pd.DataFrame, value: str, target_grid: xr.DataArray
+) -> xr.DataArray:
     """
     Interpolate a TIN (Triangulated Irregular Network) surface from a Pandas DataFrame
     containing x,y,value for a set of points using a target grid. The interpolation is
@@ -35,6 +29,8 @@ def tin_surface(data: pd.DataFrame, target_grid: xr.DataArray) -> xr.DataArray:
     data : pd.DataFrame
         DataFrame containing 'x', 'y', and 'z' columns representing the points to
         interpolate from.
+    value : str
+        The name of the column in `data` that contains the values to interpolate.
     target_grid : xr.DataArray
         Target grid as an xarray DataArray on which to interpolate the values.
 
@@ -47,7 +43,7 @@ def tin_surface(data: pd.DataFrame, target_grid: xr.DataArray) -> xr.DataArray:
     from scipy.spatial import Delaunay
 
     grid_points = target_grid.waka.grid_coordinates()
-    values = data["z"].values
+    values = data[value].values
 
     tri = Delaunay(data[["x", "y"]])
     simplices = tri.find_simplex(grid_points)
@@ -63,3 +59,16 @@ def tin_surface(data: pd.DataFrame, target_grid: xr.DataArray) -> xr.DataArray:
         coords=target_grid.coords,
         dims=target_grid.dims,
     )
+
+
+def _calculate_barycentric_coordinates(tri, simplex, points):
+    """
+    Helper function for `tin_surface` to calculate barycentric coordinates for each input
+    point to use in TIN interpolation.
+
+    """
+    x = tri.transform[simplex, :2]
+    y = points - tri.transform[simplex, 2]
+    barycentric = np.einsum("ijk,ik->ij", x, y)
+    coordinates = np.c_[barycentric, 1 - barycentric.sum(axis=1)]
+    return coordinates
