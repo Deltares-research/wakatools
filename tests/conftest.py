@@ -71,6 +71,17 @@ def bathymetry_grid():
     return bathy_grid
 
 
+@pytest.fixture
+def xyz_dataframe():
+    return pd.DataFrame(
+        {
+            "x": np.random.uniform(0, 5, 10),
+            "y": np.linspace(-3, 4, 10),
+            "z": np.random.randn(10),
+        }
+    )
+
+
 def borehole_a():
     nlayers = 5
     top = [0, 0.8, 1.5, 2.5, 3.7]
