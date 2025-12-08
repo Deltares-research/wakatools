@@ -48,7 +48,7 @@ def test_griddata(xyz_dataframe, bathymetry_grid):
 
 @pytest.mark.unittest
 def test_rbf(xyz_dataframe, bathymetry_grid):
-    rbf = waka.interpolation.rbf(xyz_dataframe, "z", bathymetry_grid, method="linear")
+    rbf = waka.interpolation.rbf(xyz_dataframe, "z", bathymetry_grid)
     assert isinstance(rbf, xr.DataArray)
     assert rbf.dims == bathymetry_grid.dims
     assert_array_almost_equal(rbf["x"], bathymetry_grid["x"])
@@ -56,10 +56,10 @@ def test_rbf(xyz_dataframe, bathymetry_grid):
     assert_array_almost_equal(
         rbf,
         [
-            [3.2605582, 4.267619, 3.34530481, 3.07298889, 3.74846097],
-            [1.99674917, 3.60153486, 2.34114118, 1.85475464, 3.30451605],
-            [2.50224382, 3.47892979, 2.123843, 1.76075331, 3.00202682],
-            [2.51108057, 2.0606107, 0.66357299, 1.43890494, 2.46777589],
-            [2.65463457, 1.64966538, 1.03867453, 1.7032501, 2.35897279],
+            [2.94248917, 4.74939923, 3.45931706, 2.6264665, 3.54428058],
+            [2.05023821, 4.34627561, 2.46904129, 1.38290294, 3.34335636],
+            [2.6933896, 4.34772865, 2.33047468, 1.44382587, 3.40129971],
+            [2.70351887, 2.17604895, 0.37018807, 1.16146539, 3.1474354],
+            [2.74546424, 1.2038024, 0.22702653, 1.51034794, 3.28929487],
         ],
     )

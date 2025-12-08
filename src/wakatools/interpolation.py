@@ -1,15 +1,8 @@
-"""
-Interpolation techniques:
-
-- griddata
-- RBF
-- TIN
-
-"""
-
 import numpy as np
 import pandas as pd
 import xarray as xr
+
+from wakatools.utils import scaling
 
 
 def tin_surface(
@@ -144,16 +137,20 @@ def rbf(
         Interpolated values on the target grid as an xarray DataArray.
 
     """
-
     from scipy.interpolate import RBFInterpolator
 
+    # Use scaled coordinates for better numerical stability
+    xmin, ymin, xmax, ymax = target_grid.rio.bounds()
+    xs = scaling.scale(data["x"].values, min_=xmin, max_=xmax)
+    ys = scaling.scale(data["y"].values, min_=ymin, max_=ymax)
+
     rbf = RBFInterpolator(
-        data[["x", "y"]].values,
+        np.c_[xs, ys],
         data[value].values,
         **kwargs,
     )
 
-    grid_points = target_grid.waka.grid_coordinates()
+    grid_points = target_grid.waka.grid_coordinates_scaled()
     interpolated = rbf(grid_points)
 
     return xr.DataArray(

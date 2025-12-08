@@ -1,18 +1,15 @@
-from typing import TYPE_CHECKING
-
-if TYPE_CHECKING:
-    import numpy as np
+import numpy as np
 
 
 def scale(
-    array: "np.ndarray", min_: int | float = None, max_: int | float = None
-) -> "np.ndarray":
+    array: np.ndarray, min_: int | float = None, max_: int | float = None
+) -> np.ndarray:
     """
     Scale an array to a 0-1 range based on provided minimum and maximum values.
 
     Parameters
     ----------
-    array : "np.ndarray"
+    array : np.ndarray
         The input array to be scaled.
     min_, max_ : int | float, optional
         The minimum and maximum values to scale data between. The default is None, then
@@ -20,7 +17,7 @@ def scale(
 
     Returns
     -------
-    "np.ndarray"
+    np.ndarray
         The scaled array.
 
     """
