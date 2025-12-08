@@ -134,9 +134,9 @@ def rbf(
         The name of the column in `data` that contains the values to interpolate.
     target_grid : xr.DataArray
         Target grid as an xarray DataArray on which to interpolate the values.
-    function : str, optional
-        RBF function to use. Options include 'linear', 'cubic', 'thin_plate', etc.
-        Default is 'linear'.
+    *kwargs
+        Additional keyword arguments to pass to `scipy.interpolate.RBFInterpolator`,
+        such as `kernel`, `epsilon`, etc. See SciPy documentation for more details.
 
     Returns
     -------
