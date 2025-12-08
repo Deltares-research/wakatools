@@ -48,7 +48,9 @@ def test_griddata(xyz_dataframe, bathymetry_grid):
 
 @pytest.mark.unittest
 def test_rbf(xyz_dataframe, bathymetry_grid):
-    rbf = waka.interpolation.rbf(xyz_dataframe, "z", bathymetry_grid)
+    rbf = waka.interpolation.rbf(
+        xyz_dataframe, "z", bathymetry_grid, kernel="thin_plate_spline"
+    )
     assert isinstance(rbf, xr.DataArray)
     assert rbf.dims == bathymetry_grid.dims
     assert_array_almost_equal(rbf["x"], bathymetry_grid["x"])
