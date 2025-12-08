@@ -119,10 +119,7 @@ def griddata(
 
 
 def rbf(
-    data: pd.DataFrame,
-    value: str,
-    target_grid: xr.DataArray,
-    method: str = "linear",
+    data: pd.DataFrame, value: str, target_grid: xr.DataArray, **kwargs
 ) -> xr.DataArray:
     """
     Interpolate values from a Pandas DataFrame containing x,y,value for a set of points
@@ -150,25 +147,10 @@ def rbf(
 
     from scipy.interpolate import RBFInterpolator
 
-    valid_methods = [
-        "thin_plate_spline",
-        "cubic",
-        "linear",
-        "quintic",
-        "multiquadric",
-        "inverse_multiquadric",
-        "gaussian",
-    ]
-
-    if method not in valid_methods:
-        raise ValueError(
-            f"Invalid kernel method '{method}'. Must be one of {valid_methods}."
-        )
-
     rbf = RBFInterpolator(
         data[["x", "y"]].values,
         data[value].values,
-        kernel=method,
+        **kwargs,
     )
 
     grid_points = target_grid.waka.grid_coordinates()
