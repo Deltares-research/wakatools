@@ -7,7 +7,6 @@ Interpolation techniques:
 
 """
 
-import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import xarray as xr
@@ -76,10 +75,7 @@ def _calculate_barycentric_coordinates(tri, simplex, points):
 
 
 def griddata(
-    data: pd.DataFrame,
-    value: str,
-    target_grid: xr.DataArray,
-    method: str = "linear",
+    data: pd.DataFrame, value: str, target_grid: xr.DataArray, **kwargs
 ) -> xr.DataArray:
     """
     Interpolate values from a Pandas DataFrame containing x,y,value for a set of points
@@ -94,9 +90,10 @@ def griddata(
         The name of the column in `data` that contains the values to interpolate.
     target_grid : xr.DataArray
         Target grid as an xarray DataArray on which to interpolate the values.
-    method : str, optional
-        Interpolation method to use. Options are 'linear', 'nearest', and 'cubic'.
-        Default is 'linear'.
+    **kwargs
+        Additional keyword arguments to pass to `scipy.interpolate.griddata`, such as
+        `method` which can be 'linear', 'nearest', or 'cubic'. See SciPy documentation
+        for more details.
 
     Returns
     -------
@@ -104,22 +101,14 @@ def griddata(
         Interpolated values on the target grid as an xarray DataArray.
 
     """
-
     from scipy.interpolate import griddata as scipy_griddata
-
-    valid_methods = ["linear", "nearest", "cubic"]
-
-    if method not in valid_methods:
-        raise ValueError(
-            f"Invalid griddata interpolation method '{method}'. Must be one of {valid_methods}."
-        )
 
     grid_points = target_grid.waka.grid_coordinates()
     interpolated = scipy_griddata(
         points=data[["x", "y"]].values,
         values=data[value].values,
         xi=grid_points,
-        method=method,
+        **kwargs,
     )
 
     return xr.DataArray(
