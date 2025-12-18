@@ -154,24 +154,11 @@ def single_horizon_seismic_file(tmp_path: Path):
     return filepath
 
 
-def multi_horizon_seismic_file(tmp_path: Path):
-    content = (
-        "PROFILE 1st reflector (t TYPE 1 44\n"
-        "SNAPPING PARAMETERS 2    20 2\n"
-        "  1.82366320E+05  3.35292340E+05           5.08      1.00              1     -1108.811 2 BwxTrajec_10_20240709_125934_P61_T1_RAW_LF\n"
-        "  1.82366227E+05  3.35292190E+05           5.09      2.00              2     -316.7626 2 BwxTrajec_10_20240709_125934_P61_T1_RAW_LF \n"
-        "  1.82366133E+05  3.35292040E+05           5.09      3.00              3      293.0978 2 BwxTrajec_10_20240709_125934_P61_T1_RAW_LF \n"
-        "  1.82387290E+05  3.35337840E+05           4.60      2.00              2     -1009.268 2 BwxTrajec_10_P_-1_20240709_101637_P61_T1_RAW_LF \n"
-        "  1.82387200E+05  3.35337600E+05           4.60      3.00              3     -804.4478 2 BwxTrajec_10_P_-1_20240709_101637_P61_T1_RAW_LF \n"
-        "EOD 1st reflector (top)\n"
-        "PROFILE 2nd reflector (b TYPE 1 6 \n"
-        "SNAPPING PARAMETERS 3    20 2\n"
-        "  1.82366320E+05  3.35292340E+05           5.63      1.00              1     -26.51012 2 BwxTrajec_10_20240709_125934_P61_T1_RAW_LF \n"
-        "  1.82366227E+05  3.35292190E+05           5.63      2.00              2     -726.5775 2 BwxTrajec_10_20240709_125934_P61_T1_RAW_LF \n"
-        "  1.82963330E+05  3.36372350E+05           4.07   1473.00           1473     -516.7563 2 BwxTrajec_9_P_-20_20240710_105753_P61_T1_RAW_LF \n"
-        "  1.82963450E+05  3.36372650E+05           4.07   1475.00           1475      2390.504 2 BwxTrajec_9_P_-20_20240710_105753_P61_T1_RAW_LF \n"
-        "EOD 2nd reflector (bottom)\n"
-    )
-    filepath = tmp_path / "seismic_multi_horizon.dat"
-    filepath.write_text(content)
-    return filepath
+@pytest.fixture
+def testdatadir():
+    return Path(__file__).parent / "testdata"
+
+
+@pytest.fixture
+def seismic_multi_horizon_file(testdatadir: Path):
+    return testdatadir / "multi_horizon_seismic.dat"
