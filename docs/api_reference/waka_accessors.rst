@@ -1,5 +1,5 @@
 Wakatools accessors
-=============================================
+=====================
 
 .. currentmodule:: wakatools.base
 
