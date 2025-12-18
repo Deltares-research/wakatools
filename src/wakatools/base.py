@@ -1,5 +1,5 @@
 import numpy as np
-import rioxarray  # noqa: F401 (get `rio` accessor registered)
+import rioxarray  # noqa: F401 (get `rio` accessor registered and ignore "unused import" warning)
 import xarray as xr
 
 from .utils import scaling

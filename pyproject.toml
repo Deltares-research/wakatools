@@ -16,7 +16,7 @@ dependencies = [
   "rioxarray",
   "xarray",
   "shapely",
-  "geost",
+  # "geost", # For now is included as a pypi-dependency in the pixi section during dev
 ]
 name = "wakatools"
 classifiers = [
@@ -40,12 +40,16 @@ path = "src/wakatools/__init__.py"
 [tool.hatch.build.targets.sdist]
 only-include = ["src/wakatools", "tests"]
 
+[tool.hatch.metadata]
+allow-direct-references = true
+
 [tool.pixi.workspace]
 channels = ["conda-forge"]
 platforms = ["win-64"]
 
 [tool.pixi.pypi-dependencies]
 wakatools = { path = ".", editable = true }
+geost = { git = "https://github.com/Deltares-research/geost.git", branch = "main" }
 
 [tool.pixi.tasks]
 test = "python -m pytest --verbose --cov=wakatools --cov-report xml --cov-report term"
