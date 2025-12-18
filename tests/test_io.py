@@ -1,9 +1,16 @@
+import re
+
+import pandas as pd
 import pytest
 
-from wakatools import read
+from wakatools.io import read
 
 
 @pytest.mark.unittest
 def test_read_seismics(single_horizon_seismic_file):
-    data = read.read_seismics(single_horizon_seismic_file)
-    assert data is None
+    read.read_seismics(single_horizon_seismic_file)
+
+
+@pytest.mark.unittest
+def test_read_multi_horizon_seismic(seismic_multi_horizon_file):
+    read.read_multi_horizon_seismic(seismic_multi_horizon_file)
