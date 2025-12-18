@@ -1,0 +1,24 @@
+﻿wakatools.base.DataArrayAccessor
+================================
+
+.. currentmodule:: wakatools.base
+
+.. autoclass:: DataArrayAccessor
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~DataArrayAccessor.__init__
+      ~DataArrayAccessor.grid_coordinates
+      ~DataArrayAccessor.grid_coordinates_scaled
+   
+   
+
+   
+   
+   

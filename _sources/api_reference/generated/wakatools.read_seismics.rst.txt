@@ -1,0 +1,6 @@
+﻿wakatools.read\_seismics
+========================
+
+.. currentmodule:: wakatools
+
+.. autofunction:: read_seismics

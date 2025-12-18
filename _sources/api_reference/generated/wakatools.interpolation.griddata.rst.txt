@@ -1,0 +1,6 @@
+﻿wakatools.interpolation.griddata
+================================
+
+.. currentmodule:: wakatools.interpolation
+
+.. autofunction:: griddata
