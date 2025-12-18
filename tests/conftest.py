@@ -138,8 +138,8 @@ def sample_grid():
 
 
 @pytest.fixture
-def seismic_multi_horizon_file(testdatadir: Path):
-    return testdatadir / "multi_horizon_seismic.dat"
+def seismic_geocard7_file(testdatadir: Path):
+    return testdatadir / "geocard7.dat"
 
 
 @pytest.fixture
