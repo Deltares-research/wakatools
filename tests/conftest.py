@@ -7,6 +7,11 @@ import xarray as xr
 
 
 @pytest.fixture
+def testdatadir():
+    return Path(__file__).parent / "testdata"
+
+
+@pytest.fixture
 def seismic_data():
     return pd.DataFrame(
         {
@@ -130,11 +135,6 @@ def boreholes():
 def sample_grid():
     # Xarray DataArray (bbox: 0, 0, 4, 4; xmin, ymin, xmax, ymax)
     return
-
-
-@pytest.fixture
-def testdatadir():
-    return Path(__file__).parent / "testdata"
 
 
 @pytest.fixture
