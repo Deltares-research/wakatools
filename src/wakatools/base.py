@@ -24,19 +24,20 @@ class DataFrameAccessor:
 
     def bounds(self) -> tuple:
         """
-        Get the bounding box of the DataFrame as (xmin, ymin, xmax, ymax).
+        Get the bounding box from the coordinates of the DataFrame as xmin, ymin, xmax,
+        ymax.
 
         Returns
         -------
         tuple
-            A tuple containing the bounding box (xmin, ymin, xmax, ymax).
+            An xmin, ymin, xmax, ymax tuple of the bounding box.
 
         """
         xmin = self._df["x"].min()
         ymin = self._df["y"].min()
         xmax = self._df["x"].max()
         ymax = self._df["y"].max()
-        return (xmin, ymin, xmax, ymax)
+        return xmin, ymin, xmax, ymax
 
     def coordinates(self) -> np.ndarray:
         """

@@ -2,8 +2,6 @@ import numpy as np
 import pandas as pd
 import xarray as xr
 
-from wakatools.utils import scaling
-
 
 def tin_surface(
     data: pd.DataFrame, value: str, target_grid: xr.DataArray
