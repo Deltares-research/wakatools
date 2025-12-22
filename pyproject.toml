@@ -49,7 +49,7 @@ platforms = ["win-64", "linux-64", "osx-64", "osx-arm64"]
 
 [tool.pixi.pypi-dependencies]
 wakatools = { path = ".", editable = true }
-geost = { git = "https://github.com/Deltares-research/geost.git", branch = "main" }
+geost = { git = "https://github.com/Deltares-research/geost.git", branch = "features/waka" }
 
 [tool.pixi.tasks]
 test = "python -m pytest --verbose --cov=wakatools --cov-report xml --cov-report term"
