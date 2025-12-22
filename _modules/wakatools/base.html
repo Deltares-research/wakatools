@@ -369,10 +369,98 @@
                   
   <h1>Source code for wakatools.base</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">rioxarray</span>  <span class="c1"># noqa: F401 (get `rio` accessor registered and ignore &quot;unused import&quot; warning)</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">xarray</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">xr</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">scaling</span>
+
+
+<div class="viewcode-block" id="DataFrameAccessor">
+<a class="viewcode-back" href="../../api_reference/generated/wakatools.base.DataFrameAccessor.html#wakatools.base.DataFrameAccessor">[docs]</a>
+<span class="nd">@pd</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">extensions</span><span class="o">.</span><span class="n">register_dataframe_accessor</span><span class="p">(</span><span class="s2">&quot;waka&quot;</span><span class="p">)</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">DataFrameAccessor</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Waka DataFrame accessor `.waka` for `pandas.DataFrame` instances holding wakatools</span>
+<span class="sd">    functionalities for DataFrames.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="DataFrameAccessor.__init__">
+<a class="viewcode-back" href="../../api_reference/generated/wakatools.base.DataFrameAccessor.html#wakatools.base.DataFrameAccessor.__init__">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pandas_obj</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_validate</span><span class="p">(</span><span class="n">pandas_obj</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_df</span> <span class="o">=</span> <span class="n">pandas_obj</span></div>
+
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_validate</span><span class="p">(</span><span class="n">pandas_obj</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="p">{</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">}</span><span class="o">.</span><span class="n">issubset</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">pandas_obj</span><span class="o">.</span><span class="n">columns</span><span class="p">)):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;DataFrame must have &#39;x&#39; and &#39;y&#39; columns.&quot;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="DataFrameAccessor.bounds">
+<a class="viewcode-back" href="../../api_reference/generated/wakatools.base.DataFrameAccessor.bounds.html#wakatools.base.DataFrameAccessor.bounds">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">bounds</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the bounding box of the DataFrame as (xmin, ymin, xmax, ymax).</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        tuple</span>
+<span class="sd">            A tuple containing the bounding box (xmin, ymin, xmax, ymax).</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">xmin</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_df</span><span class="p">[</span><span class="s2">&quot;x&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
+        <span class="n">ymin</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_df</span><span class="p">[</span><span class="s2">&quot;y&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
+        <span class="n">xmax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_df</span><span class="p">[</span><span class="s2">&quot;x&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+        <span class="n">ymax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_df</span><span class="p">[</span><span class="s2">&quot;y&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">xmin</span><span class="p">,</span> <span class="n">ymin</span><span class="p">,</span> <span class="n">xmax</span><span class="p">,</span> <span class="n">ymax</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="DataFrameAccessor.coordinates">
+<a class="viewcode-back" href="../../api_reference/generated/wakatools.base.DataFrameAccessor.coordinates.html#wakatools.base.DataFrameAccessor.coordinates">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">coordinates</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get an array of all coordinates in the DataFrame in the shape (N, 2).</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        np.ndarray</span>
+<span class="sd">            An array of shape (N, 2) containing all coordinates.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_df</span><span class="p">[[</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">]]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="DataFrameAccessor.coordinates_scaled">
+<a class="viewcode-back" href="../../api_reference/generated/wakatools.base.DataFrameAccessor.coordinates_scaled.html#wakatools.base.DataFrameAccessor.coordinates_scaled">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">coordinates_scaled</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bbox</span><span class="p">:</span> <span class="nb">tuple</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get an array of all coordinates in the DataFrame in the shape (N, 2), scaled to</span>
+<span class="sd">        between 0 and 1 based on the bounding box of the DataFrame (xmin, ymin, xmax, ymax)</span>
+<span class="sd">        or on a specified bounding box.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        bbox : tuple, optional</span>
+<span class="sd">            A tuple specifying the bounding box (xmin, ymin, xmax, ymax) to use for scaling.</span>
+<span class="sd">            If None, the bounding box of the DataFrame is used. The default is None.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        np.ndarray</span>
+<span class="sd">            An array of shape (N, 2) containing all scaled coordinates.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">bbox</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">xmin</span><span class="p">,</span> <span class="n">ymin</span><span class="p">,</span> <span class="n">xmax</span><span class="p">,</span> <span class="n">ymax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">xmin</span><span class="p">,</span> <span class="n">ymin</span><span class="p">,</span> <span class="n">xmax</span><span class="p">,</span> <span class="n">ymax</span> <span class="o">=</span> <span class="n">bbox</span>
+
+        <span class="n">xs</span> <span class="o">=</span> <span class="n">scaling</span><span class="o">.</span><span class="n">scale</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_df</span><span class="p">[</span><span class="s2">&quot;x&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">min_</span><span class="o">=</span><span class="n">xmin</span><span class="p">,</span> <span class="n">max_</span><span class="o">=</span><span class="n">xmax</span><span class="p">)</span>
+        <span class="n">ys</span> <span class="o">=</span> <span class="n">scaling</span><span class="o">.</span><span class="n">scale</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_df</span><span class="p">[</span><span class="s2">&quot;y&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">min_</span><span class="o">=</span><span class="n">ymin</span><span class="p">,</span> <span class="n">max_</span><span class="o">=</span><span class="n">ymax</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">c_</span><span class="p">[</span><span class="n">xs</span><span class="p">,</span> <span class="n">ys</span><span class="p">]</span></div>
+</div>
+
 
 
 <div class="viewcode-block" id="DataArrayAccessor">

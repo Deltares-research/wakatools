@@ -1,0 +1,25 @@
+﻿wakatools.base.DataFrameAccessor
+================================
+
+.. currentmodule:: wakatools.base
+
+.. autoclass:: DataFrameAccessor
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~DataFrameAccessor.__init__
+      ~DataFrameAccessor.bounds
+      ~DataFrameAccessor.coordinates
+      ~DataFrameAccessor.coordinates_scaled
+   
+   
+
+   
+   
+   

@@ -1,0 +1,6 @@
+﻿wakatools.base.DataFrameAccessor.coordinates\_scaled
+====================================================
+
+.. currentmodule:: wakatools.base
+
+.. automethod:: DataFrameAccessor.coordinates_scaled

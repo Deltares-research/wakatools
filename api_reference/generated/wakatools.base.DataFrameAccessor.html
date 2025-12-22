@@ -6,8 +6,9 @@
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>wakatools.read &#8212; Wakatools  documentation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>wakatools.base.DataFrameAccessor &#8212; Wakatools  documentation</title>
   
   
   
@@ -44,9 +45,11 @@
     <script src="../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/design-tabs.js?v=f930bc37"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/wakatools/read';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'api_reference/generated/wakatools.base.DataFrameAccessor';</script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="wakatools.base.DataFrameAccessor.bounds" href="wakatools.base.DataFrameAccessor.bounds.html" />
+    <link rel="prev" title="Wakatools accessors" href="../waka_accessors.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="0.1.0" />
@@ -139,7 +142,7 @@
 </li>
 
 
-<li class="nav-item ">
+<li class="nav-item current active">
   <a class="nav-link nav-internal" href="../../api_reference.html">
     API Reference
   </a>
@@ -215,6 +218,10 @@
   
 
   
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
 </div>
 
     </header>
@@ -225,10 +232,8 @@
       
       
       
-        
-      
       <dialog id="pst-primary-sidebar-modal"></dialog>
-      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar hide-on-wide">
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
         
 
   
@@ -257,7 +262,7 @@
 </li>
 
 
-<li class="nav-item ">
+<li class="nav-item current active">
   <a class="nav-link nav-internal" href="../../api_reference.html">
     API Reference
   </a>
@@ -312,6 +317,41 @@
     
   </div>
   
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><p aria-level="2" class="caption" role="heading"><span class="caption-text">Table of contents</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../read.html">Input/Output</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="wakatools.read_borehole_xml.html">wakatools.read_borehole_xml</a></li>
+<li class="toctree-l2"><a class="reference internal" href="wakatools.read_seismics.html">wakatools.read_seismics</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../interpolation.html">Interpolation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="wakatools.interpolation.griddata.html">wakatools.interpolation.griddata</a></li>
+<li class="toctree-l2"><a class="reference internal" href="wakatools.interpolation.rbf.html">wakatools.interpolation.rbf</a></li>
+<li class="toctree-l2"><a class="reference internal" href="wakatools.interpolation.tin_surface.html">wakatools.interpolation.tin_surface</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../parameters.html">Parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../utils.html">Utility</a></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../waka_accessors.html">Wakatools accessors</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">wakatools.base.DataFrameAccessor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="wakatools.base.DataFrameAccessor.bounds.html">wakatools.base.DataFrameAccessor.bounds</a></li>
+<li class="toctree-l2"><a class="reference internal" href="wakatools.base.DataFrameAccessor.coordinates.html">wakatools.base.DataFrameAccessor.coordinates</a></li>
+<li class="toctree-l2"><a class="reference internal" href="wakatools.base.DataFrameAccessor.coordinates_scaled.html">wakatools.base.DataFrameAccessor.coordinates_scaled</a></li>
+<li class="toctree-l2"><a class="reference internal" href="wakatools.base.DataArrayAccessor.html">wakatools.base.DataArrayAccessor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="wakatools.base.DataArrayAccessor.grid_coordinates.html">wakatools.base.DataArrayAccessor.grid_coordinates</a></li>
+<li class="toctree-l2"><a class="reference internal" href="wakatools.base.DataArrayAccessor.grid_coordinates_scaled.html">wakatools.base.DataArrayAccessor.grid_coordinates_scaled</a></li>
+</ul>
+</details></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
   
   <div class="sidebar-primary-items__end sidebar-primary__section">
       <div class="sidebar-primary-item">
@@ -348,9 +388,12 @@
       </a>
     </li>
     
-    <li class="breadcrumb-item"><a href="../index.html" class="nav-link">Module code</a></li>
+    <li class="breadcrumb-item"><a href="../../api_reference.html" class="nav-link">API Reference</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">wakatools.read</span></li>
+    
+    <li class="breadcrumb-item"><a href="../waka_accessors.html" class="nav-link">Wakatools accessors</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">wakatools.base.DataFrameAccessor</span></li>
   </ul>
 </nav>
 </div>
@@ -367,87 +410,40 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <h1>Source code for wakatools.read</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">Literal</span>
+  <section id="wakatools-base-dataframeaccessor">
+<h1>wakatools.base.DataFrameAccessor<a class="headerlink" href="#wakatools-base-dataframeaccessor" title="Link to this heading">#</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="wakatools.base.DataFrameAccessor">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wakatools.base.</span></span><span class="sig-name descname"><span class="pre">DataFrameAccessor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pandas_obj</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/wakatools/base.html#DataFrameAccessor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wakatools.base.DataFrameAccessor" title="Link to this definition">#</a></dt>
+<dd><p>Waka DataFrame accessor <cite>.waka</cite> for <cite>pandas.DataFrame</cite> instances holding wakatools
+functionalities for DataFrames.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="wakatools.base.DataFrameAccessor.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pandas_obj</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/wakatools/base.html#DataFrameAccessor.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wakatools.base.DataFrameAccessor.__init__" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
 
-<span class="kn">import</span><span class="w"> </span><span class="nn">geost</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<p class="rubric">Methods</p>
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#wakatools.base.DataFrameAccessor.__init__" title="wakatools.base.DataFrameAccessor.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>(pandas_obj)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="wakatools.base.DataFrameAccessor.bounds.html#wakatools.base.DataFrameAccessor.bounds" title="wakatools.base.DataFrameAccessor.bounds"><code class="xref py py-obj docutils literal notranslate"><span class="pre">bounds</span></code></a>()</p></td>
+<td><p>Get the bounding box of the DataFrame as (xmin, ymin, xmax, ymax).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="wakatools.base.DataFrameAccessor.coordinates.html#wakatools.base.DataFrameAccessor.coordinates" title="wakatools.base.DataFrameAccessor.coordinates"><code class="xref py py-obj docutils literal notranslate"><span class="pre">coordinates</span></code></a>()</p></td>
+<td><p>Get an array of all coordinates in the DataFrame in the shape (N, 2).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="wakatools.base.DataFrameAccessor.coordinates_scaled.html#wakatools.base.DataFrameAccessor.coordinates_scaled" title="wakatools.base.DataFrameAccessor.coordinates_scaled"><code class="xref py py-obj docutils literal notranslate"><span class="pre">coordinates_scaled</span></code></a>([bbox])</p></td>
+<td><p>Get an array of all coordinates in the DataFrame in the shape (N, 2), scaled to between 0 and 1 based on the bounding box of the DataFrame (xmin, ymin, xmax, ymax) or on a specified bounding box.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</dd></dl>
 
-<span class="n">BOREHOLE_READERS</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s2">&quot;geotechnical&quot;</span><span class="p">:</span> <span class="n">geost</span><span class="o">.</span><span class="n">read_bhrgt</span><span class="p">,</span>
-    <span class="s2">&quot;geological&quot;</span><span class="p">:</span> <span class="n">geost</span><span class="o">.</span><span class="n">read_bhrg</span><span class="p">,</span>
-    <span class="s2">&quot;pedological&quot;</span><span class="p">:</span> <span class="n">geost</span><span class="o">.</span><span class="n">read_bhrp</span><span class="p">,</span>
-<span class="p">}</span>
-<span class="n">BoreholeType</span> <span class="o">=</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;geotechnical&quot;</span><span class="p">,</span> <span class="s2">&quot;geological&quot;</span><span class="p">,</span> <span class="s2">&quot;pedological&quot;</span><span class="p">]</span>
+</section>
 
-
-<div class="viewcode-block" id="read_seismics">
-<a class="viewcode-back" href="../../api_reference/generated/wakatools.read_seismics.html#wakatools.read_seismics">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">read_seismics</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
-    <span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
-    <span class="n">header</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="s2">&quot;ID&quot;</span><span class="p">,</span> <span class="s2">&quot;count&quot;</span><span class="p">,</span> <span class="s2">&quot;time&quot;</span><span class="p">,</span> <span class="s2">&quot;amplitude&quot;</span><span class="p">]</span>
-    <span class="n">data</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="n">header</span>
-    <span class="k">return</span> <span class="n">data</span></div>
-
-
-
-<div class="viewcode-block" id="read_borehole_xml">
-<a class="viewcode-back" href="../../api_reference/generated/wakatools.read_borehole_xml.html#wakatools.read_borehole_xml">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">read_borehole_xml</span><span class="p">(</span>
-    <span class="n">files</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">Path</span> <span class="o">|</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">str</span> <span class="o">|</span> <span class="n">Path</span><span class="p">],</span>
-    <span class="n">type_</span><span class="p">:</span> <span class="n">BoreholeType</span> <span class="o">=</span> <span class="s2">&quot;geotechnical&quot;</span><span class="p">,</span>
-    <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
-<span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Read XML files containing borehole information. The type of data can be one of</span>
-<span class="sd">    &quot;geotechnical&quot;, &quot;geological&quot;, or &quot;pedological&quot; borehole XML files.</span>
-
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    files : str | Path | Iterable[str  |  Path]</span>
-<span class="sd">        XML file or files containing the borehole data to read.</span>
-<span class="sd">    type_ : BoreholeType, optional</span>
-<span class="sd">        The type of borehole data to read. Can be one of &quot;geotechnical&quot;, &quot;geological&quot;,</span>
-<span class="sd">        or &quot;pedological&quot;. The default is &quot;geotechnical&quot;. Each different data type use</span>
-<span class="sd">        the specific reader function from the GeoST library. See the relevant documentation</span>
-<span class="sd">        for more information and usage details.</span>
-<span class="sd">    **kwargs</span>
-<span class="sd">        Additional keyword arguments to pass to the specific reader function.</span>
-
-<span class="sd">        GeoST readers:</span>
-<span class="sd">        - geost.read_bhrgt: for &quot;geotechnical&quot; borehole XML files.</span>
-<span class="sd">        - geost.read_bhrg: for &quot;geological&quot; borehole XML files.</span>
-<span class="sd">        - geost.read_bhrp: for &quot;pedological&quot; borehole XML files.</span>
-
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    `geost.BoreholeCollection`</span>
-<span class="sd">        GeoST BoreholeCollection containing the borehole data.</span>
-
-<span class="sd">    Raises</span>
-<span class="sd">    ------</span>
-<span class="sd">    ValueError</span>
-<span class="sd">        If an unsupported borehole type is provided.</span>
-
-<span class="sd">    Examples</span>
-<span class="sd">    --------</span>
-<span class="sd">    For reading geotechnical borehole XML files from the Basis Registratie Ondergrond (BRO):</span>
-
-<span class="sd">    &gt;&gt;&gt; files = [&quot;borehole1.xml&quot;, &quot;borehole2.xml&quot;] # list of XML files from the BRO</span>
-<span class="sd">    &gt;&gt;&gt; cores = read_borehole_xml(files, type_=&quot;geotechnical&quot;)</span>
-
-<span class="sd">    See the GeoST documentation for more details on the specific reader functions and for</span>
-<span class="sd">    options for files from other sources than the BRO.</span>
-
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">reader</span> <span class="o">=</span> <span class="n">BOREHOLE_READERS</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">type_</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">reader</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unsupported borehole type: </span><span class="si">{</span><span class="n">type_</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-
-    <span class="k">return</span> <span class="n">reader</span><span class="p">(</span><span class="n">files</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
-
-</pre></div>
 
                 </article>
               
@@ -458,12 +454,60 @@
                 <footer class="prev-next-footer d-print-none">
                   
 <div class="prev-next-area">
+    <a class="left-prev"
+       href="../waka_accessors.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Wakatools accessors</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="wakatools.base.DataFrameAccessor.bounds.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">wakatools.base.DataFrameAccessor.bounds</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
 </div>
                 </footer>
               
             </div>
             
             
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#wakatools.base.DataFrameAccessor"><code class="docutils literal notranslate"><span class="pre">DataFrameAccessor</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#wakatools.base.DataFrameAccessor.__init__"><code class="docutils literal notranslate"><span class="pre">DataFrameAccessor.__init__()</span></code></a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/api_reference/generated/wakatools.base.DataFrameAccessor.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div></div>
+
+</div></div>
               
             
           </div>

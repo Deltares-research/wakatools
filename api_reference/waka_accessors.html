@@ -48,7 +48,7 @@
     <script>DOCUMENTATION_OPTIONS.pagename = 'api_reference/waka_accessors';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="wakatools.base.DataArrayAccessor" href="generated/wakatools.base.DataArrayAccessor.html" />
+    <link rel="next" title="wakatools.base.DataFrameAccessor" href="generated/wakatools.base.DataFrameAccessor.html" />
     <link rel="prev" title="Utility functions" href="utils.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -338,6 +338,10 @@
 <li class="toctree-l1"><a class="reference internal" href="parameters.html">Parameters</a></li>
 <li class="toctree-l1"><a class="reference internal" href="utils.html">Utility</a></li>
 <li class="toctree-l1 current active has-children"><a class="current reference internal" href="#">Wakatools accessors</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="generated/wakatools.base.DataFrameAccessor.html">wakatools.base.DataFrameAccessor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/wakatools.base.DataFrameAccessor.bounds.html">wakatools.base.DataFrameAccessor.bounds</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/wakatools.base.DataFrameAccessor.coordinates.html">wakatools.base.DataFrameAccessor.coordinates</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/wakatools.base.DataFrameAccessor.coordinates_scaled.html">wakatools.base.DataFrameAccessor.coordinates_scaled</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/wakatools.base.DataArrayAccessor.html">wakatools.base.DataArrayAccessor</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/wakatools.base.DataArrayAccessor.grid_coordinates.html">wakatools.base.DataArrayAccessor.grid_coordinates</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/wakatools.base.DataArrayAccessor.grid_coordinates_scaled.html">wakatools.base.DataArrayAccessor.grid_coordinates_scaled</a></li>
@@ -405,12 +409,44 @@
                   
   <section id="wakatools-accessors">
 <h1>Wakatools accessors<a class="headerlink" href="#wakatools-accessors" title="Link to this heading">#</a></h1>
-<p>Wakatools extends <a class="reference external" href="http://xarray.pydata.org/en/stable/internals/extending-xarray.html">xarray</a>
-with the <code class="docutils literal notranslate"><span class="pre">waka</span></code> accessor for common raster operations associated with interpolation. The
-<code class="docutils literal notranslate"><span class="pre">waka</span></code> accessor is activated by importing wakatools like so:</p>
+<p>Wakatools extends <a class="reference external" href="https://pandas.pydata.org/docs/development/extending.html">Pandas</a>
+and <a class="reference external" href="http://xarray.pydata.org/en/stable/internals/extending-xarray.html">Xarray</a>
+with the <code class="docutils literal notranslate"><span class="pre">waka</span></code> accessor for common DataFrame and raster operations associated with
+interpolation. The <code class="docutils literal notranslate"><span class="pre">waka</span></code> accessor is activated by importing wakatools like so:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">wakatools</span>
 </pre></div>
 </div>
+<section id="dataframeaccessor">
+<h2>DataFrameAccessor<a class="headerlink" href="#dataframeaccessor" title="Link to this heading">#</a></h2>
+<p>Once wakatools is imported you can access the <code class="docutils literal notranslate"><span class="pre">waka</span></code> accessor on any Pandas DataFrame.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+
+<span class="c1"># create a DataFrame with x and y coordinates</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;y&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mf">1.2</span><span class="p">,</span> <span class="mf">2.3</span><span class="p">,</span> <span class="mf">3.4</span><span class="p">],</span> <span class="s2">&quot;x&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.8</span><span class="p">,</span> <span class="mf">1.9</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">]})</span>
+<span class="n">bounding_box</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">waka</span><span class="o">.</span><span class="n">bounds</span><span class="p">()</span> <span class="c1"># get the bounding box from the coordinates</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">bounding_box</span><span class="p">)</span>
+<span class="c1"># Output:</span>
+<span class="c1"># (0.8, 1.2, 2.0, 3.4)</span>
+</pre></div>
+</div>
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/wakatools.base.DataFrameAccessor.html#wakatools.base.DataFrameAccessor" title="wakatools.base.DataFrameAccessor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DataFrameAccessor</span></code></a>(pandas_obj)</p></td>
+<td><p>Waka DataFrame accessor <cite>.waka</cite> for <cite>pandas.DataFrame</cite> instances holding wakatools functionalities for DataFrames.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/wakatools.base.DataFrameAccessor.bounds.html#wakatools.base.DataFrameAccessor.bounds" title="wakatools.base.DataFrameAccessor.bounds"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DataFrameAccessor.bounds</span></code></a>()</p></td>
+<td><p>Get the bounding box of the DataFrame as (xmin, ymin, xmax, ymax).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/wakatools.base.DataFrameAccessor.coordinates.html#wakatools.base.DataFrameAccessor.coordinates" title="wakatools.base.DataFrameAccessor.coordinates"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DataFrameAccessor.coordinates</span></code></a>()</p></td>
+<td><p>Get an array of all coordinates in the DataFrame in the shape (N, 2).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/wakatools.base.DataFrameAccessor.coordinates_scaled.html#wakatools.base.DataFrameAccessor.coordinates_scaled" title="wakatools.base.DataFrameAccessor.coordinates_scaled"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DataFrameAccessor.coordinates_scaled</span></code></a>([bbox])</p></td>
+<td><p>Get an array of all coordinates in the DataFrame in the shape (N, 2), scaled to between 0 and 1 based on the bounding box of the DataFrame (xmin, ymin, xmax, ymax) or on a specified bounding box.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
 <section id="dataarrayaccessor">
 <h2>DataArrayAccessor<a class="headerlink" href="#dataarrayaccessor" title="Link to this heading">#</a></h2>
 <p>Once wakatools is imported you can access the <code class="docutils literal notranslate"><span class="pre">waka</span></code> accessor on any xarray DataArray.
@@ -467,11 +503,11 @@ all grid_coordinates of arrays as input for interpolation. Like so:</p>
       </div>
     </a>
     <a class="right-next"
-       href="generated/wakatools.base.DataArrayAccessor.html"
+       href="generated/wakatools.base.DataFrameAccessor.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">wakatools.base.DataArrayAccessor</p>
+        <p class="prev-next-title">wakatools.base.DataFrameAccessor</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -494,6 +530,7 @@ all grid_coordinates of arrays as input for interpolation. Like so:</p>
   </div>
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#dataframeaccessor">DataFrameAccessor</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#dataarrayaccessor">DataArrayAccessor</a></li>
 </ul>
   </nav></div>

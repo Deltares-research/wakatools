@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>wakatools.interpolation.rbf &#8212; Wakatools  documentation</title>
+    <title>wakatools.base.DataFrameAccessor.coordinates_scaled &#8212; Wakatools  documentation</title>
   
   
   
@@ -45,11 +45,11 @@
     <script src="../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/design-tabs.js?v=f930bc37"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'api_reference/generated/wakatools.interpolation.rbf';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'api_reference/generated/wakatools.base.DataFrameAccessor.coordinates_scaled';</script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="wakatools.interpolation.tin_surface" href="wakatools.interpolation.tin_surface.html" />
-    <link rel="prev" title="wakatools.interpolation.griddata" href="wakatools.interpolation.griddata.html" />
+    <link rel="next" title="wakatools.base.DataArrayAccessor" href="wakatools.base.DataArrayAccessor.html" />
+    <link rel="prev" title="wakatools.base.DataFrameAccessor.coordinates" href="wakatools.base.DataFrameAccessor.coordinates.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="0.1.0" />
@@ -329,19 +329,19 @@
 <li class="toctree-l2"><a class="reference internal" href="wakatools.read_seismics.html">wakatools.read_seismics</a></li>
 </ul>
 </details></li>
-<li class="toctree-l1 current active has-children"><a class="reference internal" href="../interpolation.html">Interpolation</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../interpolation.html">Interpolation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="wakatools.interpolation.griddata.html">wakatools.interpolation.griddata</a></li>
-<li class="toctree-l2 current active"><a class="current reference internal" href="#">wakatools.interpolation.rbf</a></li>
+<li class="toctree-l2"><a class="reference internal" href="wakatools.interpolation.rbf.html">wakatools.interpolation.rbf</a></li>
 <li class="toctree-l2"><a class="reference internal" href="wakatools.interpolation.tin_surface.html">wakatools.interpolation.tin_surface</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1"><a class="reference internal" href="../parameters.html">Parameters</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../utils.html">Utility</a></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../waka_accessors.html">Wakatools accessors</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../waka_accessors.html">Wakatools accessors</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="wakatools.base.DataFrameAccessor.html">wakatools.base.DataFrameAccessor</a></li>
 <li class="toctree-l2"><a class="reference internal" href="wakatools.base.DataFrameAccessor.bounds.html">wakatools.base.DataFrameAccessor.bounds</a></li>
 <li class="toctree-l2"><a class="reference internal" href="wakatools.base.DataFrameAccessor.coordinates.html">wakatools.base.DataFrameAccessor.coordinates</a></li>
-<li class="toctree-l2"><a class="reference internal" href="wakatools.base.DataFrameAccessor.coordinates_scaled.html">wakatools.base.DataFrameAccessor.coordinates_scaled</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">wakatools.base.DataFrameAccessor.coordinates_scaled</a></li>
 <li class="toctree-l2"><a class="reference internal" href="wakatools.base.DataArrayAccessor.html">wakatools.base.DataArrayAccessor</a></li>
 <li class="toctree-l2"><a class="reference internal" href="wakatools.base.DataArrayAccessor.grid_coordinates.html">wakatools.base.DataArrayAccessor.grid_coordinates</a></li>
 <li class="toctree-l2"><a class="reference internal" href="wakatools.base.DataArrayAccessor.grid_coordinates_scaled.html">wakatools.base.DataArrayAccessor.grid_coordinates_scaled</a></li>
@@ -391,9 +391,9 @@
     <li class="breadcrumb-item"><a href="../../api_reference.html" class="nav-link">API Reference</a></li>
     
     
-    <li class="breadcrumb-item"><a href="../interpolation.html" class="nav-link">Interpolation</a></li>
+    <li class="breadcrumb-item"><a href="../waka_accessors.html" class="nav-link">Wakatools accessors</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">wakatools.interpolation.rbf</span></li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">wakatools.base.DataFrameAccessor.coordinates_scaled</span></li>
   </ul>
 </nav>
 </div>
@@ -410,29 +410,24 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="wakatools-interpolation-rbf">
-<h1>wakatools.interpolation.rbf<a class="headerlink" href="#wakatools-interpolation-rbf" title="Link to this heading">#</a></h1>
-<dl class="py function">
-<dt class="sig sig-object py" id="wakatools.interpolation.rbf">
-<span class="sig-prename descclassname"><span class="pre">wakatools.interpolation.</span></span><span class="sig-name descname"><span class="pre">rbf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_grid</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataArray</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataArray</span></span></span><a class="reference internal" href="../../_modules/wakatools/interpolation.html#rbf"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wakatools.interpolation.rbf" title="Link to this definition">#</a></dt>
-<dd><p>Interpolate values from a Pandas DataFrame containing x,y,value for a set of points
-onto a target grid using Radial Basis Function (RBF) interpolation.</p>
+  <section id="wakatools-base-dataframeaccessor-coordinates-scaled">
+<h1>wakatools.base.DataFrameAccessor.coordinates_scaled<a class="headerlink" href="#wakatools-base-dataframeaccessor-coordinates-scaled" title="Link to this heading">#</a></h1>
+<dl class="py method">
+<dt class="sig sig-object py" id="wakatools.base.DataFrameAccessor.coordinates_scaled">
+<span class="sig-prename descclassname"><span class="pre">DataFrameAccessor.</span></span><span class="sig-name descname"><span class="pre">coordinates_scaled</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bbox</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="../../_modules/wakatools/base.html#DataFrameAccessor.coordinates_scaled"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wakatools.base.DataFrameAccessor.coordinates_scaled" title="Link to this definition">#</a></dt>
+<dd><p>Get an array of all coordinates in the DataFrame in the shape (N, 2), scaled to
+between 0 and 1 based on the bounding box of the DataFrame (xmin, ymin, xmax, ymax)
+or on a specified bounding box.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>data</strong> (<em>pd.DataFrame</em>) – DataFrame containing ‘x’, ‘y’, and ‘z’ columns representing the points to
-interpolate from.</p></li>
-<li><p><strong>value</strong> (<em>str</em>) – The name of the column in <cite>data</cite> that contains the values to interpolate.</p></li>
-<li><p><strong>target_grid</strong> (<em>xr.DataArray</em>) – Target grid as an xarray DataArray on which to interpolate the values.</p></li>
-<li><p><strong>*kwargs</strong> – Additional keyword arguments to pass to <cite>scipy.interpolate.RBFInterpolator</cite>,
-such as <cite>kernel</cite>, <cite>epsilon</cite>, etc. See SciPy documentation for more details.</p></li>
-</ul>
+<dd class="field-odd"><p><strong>bbox</strong> (<em>tuple</em><em>, </em><em>optional</em>) – A tuple specifying the bounding box (xmin, ymin, xmax, ymax) to use for scaling.
+If None, the bounding box of the DataFrame is used. The default is None.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Interpolated values on the target grid as an xarray DataArray.</p>
+<dd class="field-even"><p>An array of shape (N, 2) containing all scaled coordinates.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>xr.DataArray</p>
+<dd class="field-odd"><p>np.ndarray</p>
 </dd>
 </dl>
 </dd></dl>
@@ -450,20 +445,20 @@ such as <cite>kernel</cite>, <cite>epsilon</cite>, etc. See SciPy documentation 
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="wakatools.interpolation.griddata.html"
+       href="wakatools.base.DataFrameAccessor.coordinates.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">wakatools.interpolation.griddata</p>
+        <p class="prev-next-title">wakatools.base.DataFrameAccessor.coordinates</p>
       </div>
     </a>
     <a class="right-next"
-       href="wakatools.interpolation.tin_surface.html"
+       href="wakatools.base.DataArrayAccessor.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">wakatools.interpolation.tin_surface</p>
+        <p class="prev-next-title">wakatools.base.DataArrayAccessor</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -486,7 +481,7 @@ such as <cite>kernel</cite>, <cite>epsilon</cite>, etc. See SciPy documentation 
   </div>
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#wakatools.interpolation.rbf"><code class="docutils literal notranslate"><span class="pre">rbf()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#wakatools.base.DataFrameAccessor.coordinates_scaled"><code class="docutils literal notranslate"><span class="pre">DataFrameAccessor.coordinates_scaled()</span></code></a></li>
 </ul>
   </nav></div>
 
@@ -494,7 +489,7 @@ such as <cite>kernel</cite>, <cite>epsilon</cite>, etc. See SciPy documentation 
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="../../_sources/api_reference/generated/wakatools.interpolation.rbf.rst.txt"
+      <li><a href="../../_sources/api_reference/generated/wakatools.base.DataFrameAccessor.coordinates_scaled.rst.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div></div>
