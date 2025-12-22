@@ -1,6 +1,30 @@
+from dataclasses import dataclass
+from typing import Literal
+
 import numpy as np
 import pandas as pd
 import xarray as xr
+from affine import Affine
+
+BBox = tuple[float, float, float, float]  # xmin, ymin, xmax, ymax
+xres = yres = int | float
+
+
+@dataclass
+class GridSpecs:
+    """
+    Placeholder for method to derive a grid from various information (see Issue #1:
+    https://github.com/Deltares-research/wakatools/issues/1). Currently not used but
+    planned for future implementation to make "target_grid" optional input in interpolation
+    routines.
+    """
+
+    bbox: BBox = None
+    resolution: int | float | tuple["xres", "yres"] = None
+    crs: int | str = None
+    transform: Affine = None
+    shape: tuple[int, int] = None
+    align: Literal["center", "corner"] = "center"
 
 
 def round_to_lower(value, base):
