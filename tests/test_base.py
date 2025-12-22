@@ -1,4 +1,5 @@
 import numpy as np
+import pandas as pd
 import pytest
 import xarray as xr
 from numpy.testing import assert_array_almost_equal
@@ -9,6 +10,88 @@ import wakatools  # Make sure "waka" accessor is available
 @pytest.fixture
 def invalid_dataarray():
     return xr.DataArray([1, 2], coords={"invalid": [0, 1]}, dims=["invalid"])
+
+
+@pytest.fixture
+def invalid_dataframe():
+    return pd.DataFrame({"a": [1, 2], "b": [3, 4]})
+
+
+class TestDataFrameAccessor:
+    @pytest.mark.unittest
+    def test_accessor_exists(self, xyz_dataframe):
+        assert hasattr(xyz_dataframe, "waka")
+
+    @pytest.mark.unittest
+    def test_accessor_invalid_dataframe(self, invalid_dataframe):
+        with pytest.raises(
+            ValueError, match="DataFrame must have 'x' and 'y' columns."
+        ):
+            invalid_dataframe.waka
+
+    @pytest.mark.unittest
+    def test_bounds(self, xyz_dataframe):
+        bounds = xyz_dataframe.waka.bounds()
+        assert bounds == (0.3, 0.2, 4.9, 4.8)
+
+    @pytest.mark.unittest
+    def test_coordinates(self, xyz_dataframe):
+        coords = xyz_dataframe.waka.coordinates()
+        assert isinstance(coords, np.ndarray)
+        assert coords.shape == (10, 2)
+        assert_array_almost_equal(
+            coords,
+            [
+                [0.3, 3.6],
+                [1.8, 2.1],
+                [2.7, 1.7],
+                [4.9, 4.8],
+                [0.6, 0.2],
+                [3.1, 3.4],
+                [4.4, 2.9],
+                [2.0, 1.3],
+                [1.2, 4.1],
+                [3.8, 0.7],
+            ],
+        )
+
+    @pytest.mark.unittest
+    def test_coordinates_scaled(self, xyz_dataframe):
+        coords = xyz_dataframe.waka.coordinates_scaled()
+        assert isinstance(coords, np.ndarray)
+        assert coords.shape == (10, 2)
+        assert_array_almost_equal(
+            coords,
+            [
+                [0.0, 0.73913043],
+                [0.32608696, 0.41304348],
+                [0.52173913, 0.32608696],
+                [1.0, 1.0],
+                [0.06521739, 0.0],
+                [0.60869565, 0.69565217],
+                [0.89130435, 0.58695652],
+                [0.36956522, 0.23913043],
+                [0.19565217, 0.84782609],
+                [0.76086957, 0.10869565],
+            ],
+        )
+
+        coords = xyz_dataframe.waka.coordinates_scaled(bbox=(0, 0, 5, 5))
+        assert_array_almost_equal(
+            coords,
+            [
+                [0.06, 0.72],
+                [0.36, 0.42],
+                [0.54, 0.34],
+                [0.98, 0.96],
+                [0.12, 0.04],
+                [0.62, 0.68],
+                [0.88, 0.58],
+                [0.4, 0.26],
+                [0.24, 0.82],
+                [0.76, 0.14],
+            ],
+        )
 
 
 class TestDataArrayAccessor:

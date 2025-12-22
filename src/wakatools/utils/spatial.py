@@ -32,10 +32,11 @@ def target_grid_from(xyz: pd.DataFrame, resolution: int | float) -> xr.DataArray
         input points, aligned according to the specified resolution.
 
     """
-    xmin = round_to_lower(xyz["x"].min(), resolution)
-    ymin = round_to_lower(xyz["y"].min(), resolution)
-    xmax = round_to_upper(xyz["x"].max(), resolution)
-    ymax = round_to_upper(xyz["y"].max(), resolution)
+    xmin, ymin, xmax, ymax = xyz.waka.bounds()
+    xmin = round_to_lower(xmin, resolution)
+    ymin = round_to_lower(ymin, resolution)
+    xmax = round_to_upper(xmax, resolution)
+    ymax = round_to_upper(ymax, resolution)
 
     # Shift xmin and ymax by 0.5 resolution to create cellcenters
     xgrid = np.arange(xmin + (0.5 * resolution), xmax, resolution)

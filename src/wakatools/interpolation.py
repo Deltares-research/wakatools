@@ -36,12 +36,12 @@ def tin_surface(
     from scipy.spatial import Delaunay
 
     grid_points = target_grid.waka.grid_coordinates()
-    values = data[value].values
 
-    tri = Delaunay(data[["x", "y"]])
+    tri = Delaunay(data.waka.coordinates())
     simplices = tri.find_simplex(grid_points)
     bary_coords = _calculate_barycentric_coordinates(tri, simplices, grid_points)
 
+    values = data[value].values
     corner_values = values[tri.simplices[simplices]]
 
     interpolated = np.sum(corner_values * bary_coords, axis=1)
@@ -98,7 +98,7 @@ def griddata(
 
     grid_points = target_grid.waka.grid_coordinates()
     interpolated = scipy_griddata(
-        points=data[["x", "y"]].values,
+        points=data.waka.coordinates(),
         values=data[value].values,
         xi=grid_points,
         **kwargs,
@@ -140,12 +140,10 @@ def rbf(
     from scipy.interpolate import RBFInterpolator
 
     # Use scaled coordinates for better numerical stability
-    xmin, ymin, xmax, ymax = target_grid.rio.bounds()
-    xs = scaling.scale(data["x"].values, min_=xmin, max_=xmax)
-    ys = scaling.scale(data["y"].values, min_=ymin, max_=ymax)
+    scaled_coords = data.waka.coordinates_scaled(bbox=target_grid.rio.bounds())
 
     rbf = RBFInterpolator(
-        np.c_[xs, ys],
+        scaled_coords,
         data[value].values,
         **kwargs,
     )
