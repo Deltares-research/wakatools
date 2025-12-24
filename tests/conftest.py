@@ -143,5 +143,5 @@ def seismic_geocard7_file(testdatadir: Path):
 
 
 @pytest.fixture
-def seismic_single_horizon_file(testdatadir: Path):
-    return testdatadir / "single_horizon_seismic.dat"
+def seismic_xyltta_file(testdatadir: Path):
+    return testdatadir / "xylinetracetimeamplitude.dat"

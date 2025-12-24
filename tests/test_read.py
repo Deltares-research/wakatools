@@ -1,12 +1,21 @@
 import geost
+import pandas as pd
 import pytest
 
 from wakatools.io import read
 
 
 @pytest.mark.unittest
-def test_read_seismics(seismic_single_horizon_file):
-    read.read_seismics(seismic_single_horizon_file)
+def test_read_seismics(seismic_geocard7_file, seismic_xyltta_file):
+    data = read.read_seismics(seismic_geocard7_file, "multi-horizon")
+    assert isinstance(data, pd.DataFrame)
+    data = read.read_seismics(seismic_xyltta_file, "single-horizon")
+    assert isinstance(data, pd.DataFrame)
+    # ToDo Eline: ADD MORE TESTS NOT FINISHED YET
+    with pytest.raises(ValueError, match="Expected 6 columns, got 1"):
+        read.read_seismics(seismic_geocard7_file, "single-horizon")
+    with pytest.raises(ValueError, match="No objects to concatenate"):
+        read.read_seismics(seismic_xyltta_file, "multi-horizon")
 
 
 @pytest.mark.unittest

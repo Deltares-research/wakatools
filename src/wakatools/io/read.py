@@ -1,4 +1,5 @@
 import re
+from functools import partial
 from pathlib import Path
 from typing import Iterable, Literal
 
@@ -14,10 +15,24 @@ BOREHOLE_READERS = {
 }
 BoreholeType = Literal["geotechnical", "geological", "pedological"]
 
+SEISMIC_READERS = {
+    "multi-horizon": kingdom_exports.geocard7,
+    "single-horizon": kingdom_exports.single_horizon,
+}
 
-def read_seismics(filename):
-    # TODO: Use kingdom export readers here for generic reading of Kingdom export files
-    return
+SeismicFile = Literal["single-horizon", "multi-horizon"]
+
+
+def read_seismics(
+    files: str | Path | Iterable[str | Path],
+    type_: SeismicFile = "multi-horizon",
+    **kwargs,
+):
+    reader = SEISMIC_READERS.get(type_)
+    if reader is None:
+        raise ValueError(f"Unsupported or wrong type: {type_}")
+
+    return reader(files, **kwargs)
 
 
 def read_borehole_xml(
