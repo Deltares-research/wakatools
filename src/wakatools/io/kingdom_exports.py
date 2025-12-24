@@ -1,4 +1,6 @@
 import re
+from collections.abc import Sequence
+from pathlib import Path
 
 import pandas as pd
 
@@ -18,7 +20,7 @@ def _apply_column_dtypes(df: pd.DataFrame) -> pd.DataFrame:
     return df
 
 
-def geocard7(filename: str) -> pd.DataFrame:
+def geocard7(filename: str | Path) -> pd.DataFrame:
     """
     Parse a Kingdom Geocard7 seismic export file and return a DataFrame
     containing the seismic data.
@@ -67,3 +69,43 @@ def geocard7(filename: str) -> pd.DataFrame:
         all_horizons.append(data)
 
     return pd.concat(all_horizons, ignore_index=True)
+
+
+def single_horizon(
+    filename: str | Path,
+    columns: Sequence[str] | None = None,
+) -> pd.DataFrame:
+    """
+    Reads a Kingdom export file containing data from a single seismic horizon into a
+    DataFrame.
+    The export is expected to be of type “X Y Line Trace Time Amplitude”.
+    Custom column names can be provided for alternative export formats.
+
+    Parameters
+    ----------
+    filename : str | Path
+            Path to the Kingdom export file
+    columns : Sequence[str] | None, optional 'X Y Line Trace Time Amplitude'
+        Optional input for column names if export is different, by default None
+
+    Returns
+    -------
+    pd.DataFrame
+        DataFrame containing the seismic data.
+
+    Raises
+    ------
+    ValueError
+        If length of the columns do not match the dataframe length, raise ValueError.
+
+    """
+    data = pd.read_csv(filename)
+
+    if columns is None:
+        columns = ["x", "y", "ID", "trace", "time", "amplitude"]
+
+    if len(columns) != data.shape[1]:
+        raise ValueError(f"Expected {len(columns)} columns, got {data.shape[1]}")
+
+    data.columns = list(columns)
+    return data
