@@ -25,9 +25,34 @@ SeismicFile = Literal["single-horizon", "multi-horizon"]
 
 def read_seismics(
     files: str | Path | Iterable[str | Path],
-    type_: SeismicFile = "multi-horizon",
+    type_: SeismicFile,
     **kwargs,
 ):
+    """
+    General reader for seismic data files. Provides support for multiple Kingdom export formats via dedicated readers.
+
+    Parameters
+    ----------
+    files : str | Path | Iterable[str  |  Path]
+        Seismic data files
+    type_ : SeismicFile, optional
+        Type of seismic data file, this can be single-horizon or
+        multi-horizon. Type of data file is based on the export method:
+        multi-horizon = Kingdom Geocard7 export, single-horizon = Kingdom
+        “X Y Line Trace Time Amplitude” export.
+
+    Returns
+    -------
+    DataFrame
+        DataFrame with seismic data from file. Format is based on input type,
+        contains at least columns: [x, y, ID, time]
+
+    Raises
+    ------
+    ValueError
+        If input file is (yet) unsupported.
+
+    """
     reader = SEISMIC_READERS.get(type_)
     if reader is None:
         raise ValueError(f"Unsupported or wrong type: {type_}")
