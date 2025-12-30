@@ -9,7 +9,7 @@ def calculate_absolute_time(
     line1: shapely.LineString, line2: shapely.LineString
 ) -> np.ndarray:
     """
-    Function to calculate the absolute time difference between two seismic lines.
+    Calculate the absolute time difference between two seismic lines.
 
     Parameters
     ----------
@@ -34,7 +34,7 @@ def calculate_absolute_time(
 
 def _time_to_depth(df: pd.DataFrame) -> pd.Series:
     """
-    Function to convert seismic two-way travel time to depth using a constant
+    Convert seismic two-way travel time to depth using a constant
     seismic velocity model.
 
     Parameters
