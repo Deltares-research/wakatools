@@ -69,10 +69,7 @@ class DataFrameAccessor:
             An array of shape (N, 2) containing all scaled coordinates.
 
         """
-        if bbox is None:
-            xmin, ymin, xmax, ymax = self.bounds()
-        else:
-            xmin, ymin, xmax, ymax = bbox
+        xmin, ymin, xmax, ymax = self.bounds() if bbox is None else bbox
 
         xs = scaling.scale(self._df["x"].values, min_=xmin, max_=xmax)
         ys = scaling.scale(self._df["y"].values, min_=ymin, max_=ymax)
@@ -128,10 +125,7 @@ class DataArrayAccessor:
             An array of shape (N, 2) containing all scaled grid coordinates.
 
         """
-        if bbox is None:
-            xmin, ymin, xmax, ymax = self._da.rio.bounds()
-        else:
-            xmin, ymin, xmax, ymax = bbox
+        xmin, ymin, xmax, ymax = self._da.rio.bounds() if bbox is None else bbox
 
         xs = scaling.scale(self._da.coords["x"].values, min_=xmin, max_=xmax)
         ys = scaling.scale(self._da.coords["y"].values, min_=ymin, max_=ymax)
