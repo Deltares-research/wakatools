@@ -342,6 +342,7 @@
 <li class="toctree-l2"><a class="reference internal" href="wakatools.base.DataFrameAccessor.bounds.html">wakatools.base.DataFrameAccessor.bounds</a></li>
 <li class="toctree-l2"><a class="reference internal" href="wakatools.base.DataFrameAccessor.coordinates.html">wakatools.base.DataFrameAccessor.coordinates</a></li>
 <li class="toctree-l2"><a class="reference internal" href="wakatools.base.DataFrameAccessor.coordinates_scaled.html">wakatools.base.DataFrameAccessor.coordinates_scaled</a></li>
+<li class="toctree-l2"><a class="reference internal" href="wakatools.base.DataFrameAccessor.get_raster_values.html">wakatools.base.DataFrameAccessor.get_raster_values</a></li>
 <li class="toctree-l2"><a class="reference internal" href="wakatools.base.DataArrayAccessor.html">wakatools.base.DataArrayAccessor</a></li>
 <li class="toctree-l2"><a class="reference internal" href="wakatools.base.DataArrayAccessor.grid_coordinates.html">wakatools.base.DataArrayAccessor.grid_coordinates</a></li>
 <li class="toctree-l2"><a class="reference internal" href="wakatools.base.DataArrayAccessor.grid_coordinates_scaled.html">wakatools.base.DataArrayAccessor.grid_coordinates_scaled</a></li>
@@ -414,7 +415,7 @@
 <h1>wakatools.interpolation.tin_surface<a class="headerlink" href="#wakatools-interpolation-tin-surface" title="Link to this heading">#</a></h1>
 <dl class="py function">
 <dt class="sig sig-object py" id="wakatools.interpolation.tin_surface">
-<span class="sig-prename descclassname"><span class="pre">wakatools.interpolation.</span></span><span class="sig-name descname"><span class="pre">tin_surface</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_grid</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataArray</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataArray</span></span></span><a class="reference internal" href="../../_modules/wakatools/interpolation.html#tin_surface"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wakatools.interpolation.tin_surface" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">wakatools.interpolation.</span></span><span class="sig-name descname"><span class="pre">tin_surface</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">GeoDataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_grid</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataArray</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataArray</span></span></span><a class="reference internal" href="../../_modules/wakatools/interpolation.html#tin_surface"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wakatools.interpolation.tin_surface" title="Link to this definition">#</a></dt>
 <dd><p>Interpolate a TIN (Triangulated Irregular Network) surface from a Pandas DataFrame
 containing x,y,value for a set of points using a target grid. The interpolation is
 done by taking a weighted average of the values at the vertices of the enclosing
@@ -425,8 +426,8 @@ valid barycentric coordinates.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>data</strong> (<em>pd.DataFrame</em>) – DataFrame containing ‘x’, ‘y’, and ‘z’ columns representing the points to
-interpolate from.</p></li>
+<li><p><strong>data</strong> (<em>pd.DataFrame</em><em> | </em><em>gpd.GeoDataFrame</em>) – One or more DataFrame or GeoDataFrame instances containing ‘x’, ‘y’, and ‘value’
+columns representing the points to interpolate from.</p></li>
 <li><p><strong>value</strong> (<em>str</em>) – The name of the column in <cite>data</cite> that contains the values to interpolate.</p></li>
 <li><p><strong>target_grid</strong> (<em>xr.DataArray</em>) – Target grid as an xarray DataArray on which to interpolate the values.</p></li>
 </ul>

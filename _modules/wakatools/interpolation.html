@@ -368,17 +368,19 @@
                 <article class="bd-article">
                   
   <h1>Source code for wakatools.interpolation</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">geopandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">gpd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">xarray</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">xr</span>
 
-<span class="kn">from</span><span class="w"> </span><span class="nn">wakatools.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">scaling</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">wakatools.validation</span><span class="w"> </span><span class="kn">import</span> <span class="n">validate_input</span>
 
 
 <div class="viewcode-block" id="tin_surface">
 <a class="viewcode-back" href="../../api_reference/generated/wakatools.interpolation.tin_surface.html#wakatools.interpolation.tin_surface">[docs]</a>
+<span class="nd">@validate_input</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">tin_surface</span><span class="p">(</span>
-    <span class="n">data</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">target_grid</span><span class="p">:</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span>
+    <span class="o">*</span><span class="n">data</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span> <span class="o">|</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">target_grid</span><span class="p">:</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Interpolate a TIN (Triangulated Irregular Network) surface from a Pandas DataFrame</span>
@@ -391,9 +393,9 @@
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    data : pd.DataFrame</span>
-<span class="sd">        DataFrame containing &#39;x&#39;, &#39;y&#39;, and &#39;z&#39; columns representing the points to</span>
-<span class="sd">        interpolate from.</span>
+<span class="sd">    data : pd.DataFrame | gpd.GeoDataFrame</span>
+<span class="sd">        One or more DataFrame or GeoDataFrame instances containing &#39;x&#39;, &#39;y&#39;, and &#39;value&#39;</span>
+<span class="sd">        columns representing the points to interpolate from.</span>
 <span class="sd">    value : str</span>
 <span class="sd">        The name of the column in `data` that contains the values to interpolate.</span>
 <span class="sd">    target_grid : xr.DataArray</span>
@@ -406,6 +408,8 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="kn">from</span><span class="w"> </span><span class="nn">scipy.spatial</span><span class="w"> </span><span class="kn">import</span> <span class="n">Delaunay</span>
+
+    <span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">ignore_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
     <span class="n">grid_points</span> <span class="o">=</span> <span class="n">target_grid</span><span class="o">.</span><span class="n">waka</span><span class="o">.</span><span class="n">grid_coordinates</span><span class="p">()</span>
 
@@ -442,8 +446,12 @@
 
 <div class="viewcode-block" id="griddata">
 <a class="viewcode-back" href="../../api_reference/generated/wakatools.interpolation.griddata.html#wakatools.interpolation.griddata">[docs]</a>
+<span class="nd">@validate_input</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">griddata</span><span class="p">(</span>
-    <span class="n">data</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">target_grid</span><span class="p">:</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+    <span class="o">*</span><span class="n">data</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span> <span class="o">|</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">,</span>
+    <span class="n">value</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">target_grid</span><span class="p">:</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span><span class="p">,</span>
+    <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Interpolate values from a Pandas DataFrame containing x,y,value for a set of points</span>
@@ -451,9 +459,9 @@
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    data : pd.DataFrame</span>
-<span class="sd">        DataFrame containing &#39;x&#39;, &#39;y&#39;, and &#39;z&#39; columns representing the points to</span>
-<span class="sd">        interpolate from.</span>
+<span class="sd">    data : pd.DataFrame | gpd.GeoDataFrame</span>
+<span class="sd">        One or more DataFrame or GeoDataFrame instances containing &#39;x&#39;, &#39;y&#39;, and &#39;value&#39;</span>
+<span class="sd">        columns representing the points to interpolate from.</span>
 <span class="sd">    value : str</span>
 <span class="sd">        The name of the column in `data` that contains the values to interpolate.</span>
 <span class="sd">    target_grid : xr.DataArray</span>
@@ -470,6 +478,8 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="kn">from</span><span class="w"> </span><span class="nn">scipy.interpolate</span><span class="w"> </span><span class="kn">import</span> <span class="n">griddata</span> <span class="k">as</span> <span class="n">scipy_griddata</span>
+
+    <span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">ignore_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
     <span class="n">grid_points</span> <span class="o">=</span> <span class="n">target_grid</span><span class="o">.</span><span class="n">waka</span><span class="o">.</span><span class="n">grid_coordinates</span><span class="p">()</span>
     <span class="n">interpolated</span> <span class="o">=</span> <span class="n">scipy_griddata</span><span class="p">(</span>
@@ -489,8 +499,12 @@
 
 <div class="viewcode-block" id="rbf">
 <a class="viewcode-back" href="../../api_reference/generated/wakatools.interpolation.rbf.html#wakatools.interpolation.rbf">[docs]</a>
+<span class="nd">@validate_input</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">rbf</span><span class="p">(</span>
-    <span class="n">data</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">target_grid</span><span class="p">:</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+    <span class="o">*</span><span class="n">data</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span> <span class="o">|</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">,</span>
+    <span class="n">value</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">target_grid</span><span class="p">:</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span><span class="p">,</span>
+    <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Interpolate values from a Pandas DataFrame containing x,y,value for a set of points</span>
@@ -498,14 +512,14 @@
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    data : pd.DataFrame</span>
-<span class="sd">        DataFrame containing &#39;x&#39;, &#39;y&#39;, and &#39;z&#39; columns representing the points to</span>
-<span class="sd">        interpolate from.</span>
+<span class="sd">    data : pd.DataFrame | gpd.GeoDataFrame</span>
+<span class="sd">        One or more DataFrame or GeoDataFrame instances containing &#39;x&#39;, &#39;y&#39;, and &#39;value&#39;</span>
+<span class="sd">        columns representing the points to interpolate from.</span>
 <span class="sd">    value : str</span>
 <span class="sd">        The name of the column in `data` that contains the values to interpolate.</span>
 <span class="sd">    target_grid : xr.DataArray</span>
 <span class="sd">        Target grid as an xarray DataArray on which to interpolate the values.</span>
-<span class="sd">    *kwargs</span>
+<span class="sd">    **kwargs</span>
 <span class="sd">        Additional keyword arguments to pass to `scipy.interpolate.RBFInterpolator`,</span>
 <span class="sd">        such as `kernel`, `epsilon`, etc. See SciPy documentation for more details.</span>
 
@@ -516,6 +530,8 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="kn">from</span><span class="w"> </span><span class="nn">scipy.interpolate</span><span class="w"> </span><span class="kn">import</span> <span class="n">RBFInterpolator</span>
+
+    <span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">ignore_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
     <span class="c1"># Use scaled coordinates for better numerical stability</span>
     <span class="n">scaled_coords</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">waka</span><span class="o">.</span><span class="n">coordinates_scaled</span><span class="p">(</span><span class="n">bbox</span><span class="o">=</span><span class="n">target_grid</span><span class="o">.</span><span class="n">rio</span><span class="o">.</span><span class="n">bounds</span><span class="p">())</span>

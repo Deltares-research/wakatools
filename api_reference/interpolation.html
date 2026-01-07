@@ -342,6 +342,7 @@
 <li class="toctree-l2"><a class="reference internal" href="generated/wakatools.base.DataFrameAccessor.bounds.html">wakatools.base.DataFrameAccessor.bounds</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/wakatools.base.DataFrameAccessor.coordinates.html">wakatools.base.DataFrameAccessor.coordinates</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/wakatools.base.DataFrameAccessor.coordinates_scaled.html">wakatools.base.DataFrameAccessor.coordinates_scaled</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/wakatools.base.DataFrameAccessor.get_raster_values.html">wakatools.base.DataFrameAccessor.get_raster_values</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/wakatools.base.DataArrayAccessor.html">wakatools.base.DataArrayAccessor</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/wakatools.base.DataArrayAccessor.grid_coordinates.html">wakatools.base.DataArrayAccessor.grid_coordinates</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/wakatools.base.DataArrayAccessor.grid_coordinates_scaled.html">wakatools.base.DataArrayAccessor.grid_coordinates_scaled</a></li>
@@ -414,13 +415,13 @@
 <h2>Interpolation Methods<a class="headerlink" href="#interpolation-methods" title="Link to this heading">#</a></h2>
 <div class="pst-scrollable-table-container"><table class="autosummary longtable table">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/wakatools.interpolation.griddata.html#wakatools.interpolation.griddata" title="wakatools.interpolation.griddata"><code class="xref py py-obj docutils literal notranslate"><span class="pre">griddata</span></code></a>(data, value, target_grid, **kwargs)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/wakatools.interpolation.griddata.html#wakatools.interpolation.griddata" title="wakatools.interpolation.griddata"><code class="xref py py-obj docutils literal notranslate"><span class="pre">griddata</span></code></a>(*data, value, target_grid, **kwargs)</p></td>
 <td><p>Interpolate values from a Pandas DataFrame containing x,y,value for a set of points onto a target grid using SciPy's griddata function.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="generated/wakatools.interpolation.rbf.html#wakatools.interpolation.rbf" title="wakatools.interpolation.rbf"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rbf</span></code></a>(data, value, target_grid, **kwargs)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/wakatools.interpolation.rbf.html#wakatools.interpolation.rbf" title="wakatools.interpolation.rbf"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rbf</span></code></a>(*data, value, target_grid, **kwargs)</p></td>
 <td><p>Interpolate values from a Pandas DataFrame containing x,y,value for a set of points onto a target grid using Radial Basis Function (RBF) interpolation.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/wakatools.interpolation.tin_surface.html#wakatools.interpolation.tin_surface" title="wakatools.interpolation.tin_surface"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tin_surface</span></code></a>(data, value, target_grid)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/wakatools.interpolation.tin_surface.html#wakatools.interpolation.tin_surface" title="wakatools.interpolation.tin_surface"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tin_surface</span></code></a>(*data, value, target_grid)</p></td>
 <td><p>Interpolate a TIN (Triangulated Irregular Network) surface from a Pandas DataFrame containing x,y,value for a set of points using a target grid.</p></td>
 </tr>
 </tbody>

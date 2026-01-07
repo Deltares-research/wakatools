@@ -369,6 +369,7 @@
                   
   <h1>Source code for wakatools.io.read</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">partial</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">Literal</span>
 
@@ -384,13 +385,69 @@
 <span class="p">}</span>
 <span class="n">BoreholeType</span> <span class="o">=</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;geotechnical&quot;</span><span class="p">,</span> <span class="s2">&quot;geological&quot;</span><span class="p">,</span> <span class="s2">&quot;pedological&quot;</span><span class="p">]</span>
 
+<span class="n">SEISMIC_READERS</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;multi-horizon&quot;</span><span class="p">:</span> <span class="n">kingdom_exports</span><span class="o">.</span><span class="n">geocard7</span><span class="p">,</span>
+    <span class="s2">&quot;single-horizon&quot;</span><span class="p">:</span> <span class="n">kingdom_exports</span><span class="o">.</span><span class="n">single_horizon</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="n">SeismicFile</span> <span class="o">=</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;single-horizon&quot;</span><span class="p">,</span> <span class="s2">&quot;multi-horizon&quot;</span><span class="p">]</span>
+
 
 <div class="viewcode-block" id="read_seismics">
 <a class="viewcode-back" href="../../../api_reference/generated/wakatools.read_seismics.html#wakatools.read_seismics">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">read_seismics</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
-    <span class="c1"># TODO: Use kingdom export readers here for generic reading of Kingdom export files</span>
-    <span class="k">return</span></div>
+<span class="k">def</span><span class="w"> </span><span class="nf">read_seismics</span><span class="p">(</span>
+    <span class="n">files</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">Path</span> <span class="o">|</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">str</span> <span class="o">|</span> <span class="n">Path</span><span class="p">],</span>
+    <span class="n">type_</span><span class="p">:</span> <span class="n">SeismicFile</span><span class="p">,</span>
+    <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    General reader for seismic data files. Provides support for multiple Kingdom export formats via dedicated readers.</span>
 
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    files : str | Path | Iterable[str  |  Path]</span>
+<span class="sd">        Seismic data files</span>
+<span class="sd">    type_ : SeismicFile, optional</span>
+<span class="sd">        Type of seismic data file, this can be single-horizon or</span>
+<span class="sd">        multi-horizon. Type of data file is based on the export method:</span>
+<span class="sd">        multi-horizon = Kingdom Geocard7 export, single-horizon = Kingdom</span>
+<span class="sd">        “X Y Line Trace Time Amplitude” export.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    DataFrame</span>
+<span class="sd">        DataFrame with seismic data from file. Format is based on input type,</span>
+<span class="sd">        contains at least columns: [x, y, ID, time]</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    ValueError</span>
+<span class="sd">        If input file is (yet) unsupported.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">reader</span> <span class="o">=</span> <span class="n">SEISMIC_READERS</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">type_</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">reader</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unsupported or wrong type: </span><span class="si">{</span><span class="n">type_</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">reader</span><span class="p">(</span><span class="n">files</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">read_seismics_as_seismiccollection</span><span class="p">(</span>
+    <span class="n">files</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">Path</span> <span class="o">|</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">str</span> <span class="o">|</span> <span class="n">Path</span><span class="p">],</span>
+    <span class="n">type_</span><span class="p">:</span> <span class="n">SeismicFile</span><span class="p">,</span>
+    <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+<span class="p">):</span>
+    <span class="c1"># Vraag aan bas: kan dit dan ook in read_seismics, is dat handig ?</span>
+    <span class="c1"># en miss een andere n aam want dit ziet er niet uit maar ik heb even geen inspiratie</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">wakatools.parameters</span><span class="w"> </span><span class="kn">import</span> <span class="n">SeismicCollection</span>
+
+    <span class="n">seismic_data</span> <span class="o">=</span> <span class="n">read_seismics</span><span class="p">(</span>
+        <span class="n">files</span><span class="p">,</span>
+        <span class="n">type_</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">SeismicCollection</span><span class="p">(</span><span class="n">seismic_data</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="read_borehole_xml">

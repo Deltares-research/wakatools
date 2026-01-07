@@ -342,6 +342,7 @@
 <li class="toctree-l2"><a class="reference internal" href="generated/wakatools.base.DataFrameAccessor.bounds.html">wakatools.base.DataFrameAccessor.bounds</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/wakatools.base.DataFrameAccessor.coordinates.html">wakatools.base.DataFrameAccessor.coordinates</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/wakatools.base.DataFrameAccessor.coordinates_scaled.html">wakatools.base.DataFrameAccessor.coordinates_scaled</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/wakatools.base.DataFrameAccessor.get_raster_values.html">wakatools.base.DataFrameAccessor.get_raster_values</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/wakatools.base.DataArrayAccessor.html">wakatools.base.DataArrayAccessor</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/wakatools.base.DataArrayAccessor.grid_coordinates.html">wakatools.base.DataArrayAccessor.grid_coordinates</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/wakatools.base.DataArrayAccessor.grid_coordinates_scaled.html">wakatools.base.DataArrayAccessor.grid_coordinates_scaled</a></li>
@@ -435,13 +436,16 @@ interpolation. The <code class="docutils literal notranslate"><span class="pre">
 <td><p>Waka DataFrame accessor <cite>.waka</cite> for <cite>pandas.DataFrame</cite> instances holding wakatools functionalities for DataFrames.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="generated/wakatools.base.DataFrameAccessor.bounds.html#wakatools.base.DataFrameAccessor.bounds" title="wakatools.base.DataFrameAccessor.bounds"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DataFrameAccessor.bounds</span></code></a>()</p></td>
-<td><p>Get the bounding box of the DataFrame as (xmin, ymin, xmax, ymax).</p></td>
+<td><p>Get the bounding box from the coordinates of the DataFrame as xmin, ymin, xmax, ymax.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/wakatools.base.DataFrameAccessor.coordinates.html#wakatools.base.DataFrameAccessor.coordinates" title="wakatools.base.DataFrameAccessor.coordinates"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DataFrameAccessor.coordinates</span></code></a>()</p></td>
 <td><p>Get an array of all coordinates in the DataFrame in the shape (N, 2).</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="generated/wakatools.base.DataFrameAccessor.coordinates_scaled.html#wakatools.base.DataFrameAccessor.coordinates_scaled" title="wakatools.base.DataFrameAccessor.coordinates_scaled"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DataFrameAccessor.coordinates_scaled</span></code></a>([bbox])</p></td>
 <td><p>Get an array of all coordinates in the DataFrame in the shape (N, 2), scaled to between 0 and 1 based on the bounding box of the DataFrame (xmin, ymin, xmax, ymax) or on a specified bounding box.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/wakatools.base.DataFrameAccessor.get_raster_values.html#wakatools.base.DataFrameAccessor.get_raster_values" title="wakatools.base.DataFrameAccessor.get_raster_values"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DataFrameAccessor.get_raster_values</span></code></a>(raster)</p></td>
+<td><p>Read raster values from a given xarray DataArray nearest to the &quot;x&quot; and &quot;y&quot; coordinates in the DataFrame.</p></td>
 </tr>
 </tbody>
 </table>

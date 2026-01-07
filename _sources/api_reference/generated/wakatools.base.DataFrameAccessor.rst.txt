@@ -17,6 +17,7 @@
       ~DataFrameAccessor.bounds
       ~DataFrameAccessor.coordinates
       ~DataFrameAccessor.coordinates_scaled
+      ~DataFrameAccessor.get_raster_values
    
    
 

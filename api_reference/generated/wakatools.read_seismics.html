@@ -342,6 +342,7 @@
 <li class="toctree-l2"><a class="reference internal" href="wakatools.base.DataFrameAccessor.bounds.html">wakatools.base.DataFrameAccessor.bounds</a></li>
 <li class="toctree-l2"><a class="reference internal" href="wakatools.base.DataFrameAccessor.coordinates.html">wakatools.base.DataFrameAccessor.coordinates</a></li>
 <li class="toctree-l2"><a class="reference internal" href="wakatools.base.DataFrameAccessor.coordinates_scaled.html">wakatools.base.DataFrameAccessor.coordinates_scaled</a></li>
+<li class="toctree-l2"><a class="reference internal" href="wakatools.base.DataFrameAccessor.get_raster_values.html">wakatools.base.DataFrameAccessor.get_raster_values</a></li>
 <li class="toctree-l2"><a class="reference internal" href="wakatools.base.DataArrayAccessor.html">wakatools.base.DataArrayAccessor</a></li>
 <li class="toctree-l2"><a class="reference internal" href="wakatools.base.DataArrayAccessor.grid_coordinates.html">wakatools.base.DataArrayAccessor.grid_coordinates</a></li>
 <li class="toctree-l2"><a class="reference internal" href="wakatools.base.DataArrayAccessor.grid_coordinates_scaled.html">wakatools.base.DataArrayAccessor.grid_coordinates_scaled</a></li>
@@ -414,8 +415,30 @@
 <h1>wakatools.read_seismics<a class="headerlink" href="#wakatools-read-seismics" title="Link to this heading">#</a></h1>
 <dl class="py function">
 <dt class="sig sig-object py" id="wakatools.read_seismics">
-<span class="sig-prename descclassname"><span class="pre">wakatools.</span></span><span class="sig-name descname"><span class="pre">read_seismics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/wakatools/io/read.html#read_seismics"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wakatools.read_seismics" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<span class="sig-prename descclassname"><span class="pre">wakatools.</span></span><span class="sig-name descname"><span class="pre">read_seismics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">files</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Path</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Path</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type_</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Literal</span><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'single-horizon'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'multi-horizon'</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/wakatools/io/read.html#read_seismics"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wakatools.read_seismics" title="Link to this definition">#</a></dt>
+<dd><p>General reader for seismic data files. Provides support for multiple Kingdom export formats via dedicated readers.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>files</strong> (<em>str</em><em> | </em><em>Path</em><em> | </em><em>Iterable</em><em>[</em><em>str</em><em>  |  </em><em>Path</em><em>]</em>) – Seismic data files</p></li>
+<li><p><strong>type</strong> (<em>SeismicFile</em><em>, </em><em>optional</em>) – Type of seismic data file, this can be single-horizon or
+multi-horizon. Type of data file is based on the export method:
+multi-horizon = Kingdom Geocard7 export, single-horizon = Kingdom
+“X Y Line Trace Time Amplitude” export.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>DataFrame with seismic data from file. Format is based on input type,
+contains at least columns: [x, y, ID, time]</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>DataFrame</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If input file is (yet) unsupported.</p>
+</dd>
+</dl>
+</dd></dl>
 
 </section>
 

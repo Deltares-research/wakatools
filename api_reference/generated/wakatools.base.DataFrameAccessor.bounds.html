@@ -342,6 +342,7 @@
 <li class="toctree-l2 current active"><a class="current reference internal" href="#">wakatools.base.DataFrameAccessor.bounds</a></li>
 <li class="toctree-l2"><a class="reference internal" href="wakatools.base.DataFrameAccessor.coordinates.html">wakatools.base.DataFrameAccessor.coordinates</a></li>
 <li class="toctree-l2"><a class="reference internal" href="wakatools.base.DataFrameAccessor.coordinates_scaled.html">wakatools.base.DataFrameAccessor.coordinates_scaled</a></li>
+<li class="toctree-l2"><a class="reference internal" href="wakatools.base.DataFrameAccessor.get_raster_values.html">wakatools.base.DataFrameAccessor.get_raster_values</a></li>
 <li class="toctree-l2"><a class="reference internal" href="wakatools.base.DataArrayAccessor.html">wakatools.base.DataArrayAccessor</a></li>
 <li class="toctree-l2"><a class="reference internal" href="wakatools.base.DataArrayAccessor.grid_coordinates.html">wakatools.base.DataArrayAccessor.grid_coordinates</a></li>
 <li class="toctree-l2"><a class="reference internal" href="wakatools.base.DataArrayAccessor.grid_coordinates_scaled.html">wakatools.base.DataArrayAccessor.grid_coordinates_scaled</a></li>
@@ -415,10 +416,11 @@
 <dl class="py method">
 <dt class="sig sig-object py" id="wakatools.base.DataFrameAccessor.bounds">
 <span class="sig-prename descclassname"><span class="pre">DataFrameAccessor.</span></span><span class="sig-name descname"><span class="pre">bounds</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span></span></span><a class="reference internal" href="../../_modules/wakatools/base.html#DataFrameAccessor.bounds"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wakatools.base.DataFrameAccessor.bounds" title="Link to this definition">#</a></dt>
-<dd><p>Get the bounding box of the DataFrame as (xmin, ymin, xmax, ymax).</p>
+<dd><p>Get the bounding box from the coordinates of the DataFrame as xmin, ymin, xmax,
+ymax.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>A tuple containing the bounding box (xmin, ymin, xmax, ymax).</p>
+<dd class="field-odd"><p>An xmin, ymin, xmax, ymax tuple of the bounding box.</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>tuple</p>
