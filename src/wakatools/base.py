@@ -75,6 +75,27 @@ class DataFrameAccessor:
         ys = scaling.scale(self._df["y"].values, min_=ymin, max_=ymax)
         return np.c_[xs, ys]
 
+    def get_raster_values(self, raster: xr.DataArray) -> np.ndarray:
+        """
+        Read raster values from a given xarray DataArray nearest to the "x" and "y"
+        coordinates in the DataFrame. This assumes that the raster's coordinates are in
+        the same coordinate reference system as the DataFrame coordinates.
+
+        Parameters
+        ----------
+        raster : xr.DataArray
+            The raster DataArray from which to read values.
+
+        Returns
+        -------
+        np.ndarray
+            An array of raster values corresponding to the DataFrame coordinates.
+
+        """
+        from geost.spatial import get_raster_values
+
+        return get_raster_values(self._df["x"], self._df["y"], raster)
+
 
 @xr.register_dataarray_accessor("waka")
 class DataArrayAccessor:

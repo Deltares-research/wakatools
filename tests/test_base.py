@@ -93,6 +93,16 @@ class TestDataFrameAccessor:
             ],
         )
 
+    @pytest.mark.unittest
+    def test_get_raster_values(self, xyz_dataframe, bathymetry_grid):
+        values = xyz_dataframe.waka.get_raster_values(bathymetry_grid)
+        assert isinstance(values, np.ndarray)
+        assert values.shape == (10,)
+        assert_array_almost_equal(
+            values,
+            [0.1, 0.3, 0.5, 0.4, 0.4, 0.4, 0.6, 0.5, 0.1, 0.7],
+        )
+
 
 class TestDataArrayAccessor:
     @pytest.mark.unittest

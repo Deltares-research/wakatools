@@ -1,9 +1,11 @@
 from pathlib import Path
 
+import geopandas as gpd
 import numpy as np
 import pandas as pd
 import pytest
 import xarray as xr
+from geost import BoreholeCollection, spatial
 
 
 @pytest.fixture
@@ -53,13 +55,6 @@ def seismic_data():
 
 
 @pytest.fixture
-def seismic_file(tmp_path: Path, seismic_data: pd.DataFrame):
-    filepath = tmp_path / "seismic.dat"
-    seismic_data.to_csv(filepath, sep=" ", index=False, header=False)
-    return filepath
-
-
-@pytest.fixture
 def bathymetry_grid():
     xcoords = np.arange(5) + 0.5
     ycoords = np.arange(5, 0, -1) - 0.5
@@ -76,72 +71,67 @@ def bathymetry_grid():
 
 
 @pytest.fixture
-def xyz_dataframe():
+def xyz_dataframe(bathymetry_grid):
+    xcoords = np.array([0.3, 1.8, 2.7, 4.9, 0.6, 3.1, 4.4, 2.0, 1.2, 3.8])
+    ycoords = np.array([3.6, 2.1, 1.7, 4.8, 0.2, 3.4, 2.9, 1.3, 4.1, 0.7])
+
+    # Get the nearest bathymetry values at these coordinates and subtract some values
+    # forconsistency in elevation.
+    bathy = spatial.get_raster_values(xcoords, ycoords, bathymetry_grid)
+    diff = np.array([1.0, 1.2, 1.8, 1.1, 0.9, 1.3, 1.0, 0.8, 1.4, 0.9])
+
     return pd.DataFrame(
         {
-            "x": [0.3, 1.8, 2.7, 4.9, 0.6, 3.1, 4.4, 2.0, 1.2, 3.8],
-            "y": [3.6, 2.1, 1.7, 4.8, 0.2, 3.4, 2.9, 1.3, 4.1, 0.7],
-            "z": [1.4, 3.9, 0.6, 4.2, 2.8, 1.1, 3.3, 0.4, 4.7, 2.0],
-        }
-    )
-
-
-def borehole_a():
-    nlayers = 5
-    top = [0, 0.8, 1.5, 2.5, 3.7]
-    bottom = top[1:] + [4.2]
-    mv = 0.2
-    end = mv - bottom[-1]
-    return pd.DataFrame(
-        {
-            "nr": np.full(nlayers, "A"),
-            "x": 4,
-            "y": 2,
-            "surface": np.full(nlayers, mv),
-            "end": np.full(nlayers, end),
-            "top": top,
-            "bottom": bottom,
-            "lith": ["K", "K", "Z", "Z", "K"],
-        }
-    )
-
-
-def borehole_b():
-    nlayers = 5
-    top = [0, 0.6, 1.2, 2.5, 3.1]
-    bottom = top[1:] + [3.9]
-    mv = 0.3
-    end = mv - bottom[-1]
-    return pd.DataFrame(
-        {
-            "nr": np.full(nlayers, "B"),
-            "x": 2,
-            "y": 1,
-            "surface": np.full(nlayers, mv),
-            "end": np.full(nlayers, end),
-            "top": top,
-            "bottom": bottom,
-            "lith": ["K", "K", "V", "V", "K"],
+            "x": xcoords,
+            "y": ycoords,
+            "z": bathy - diff,
         }
     )
 
 
 @pytest.fixture
 def boreholes():
-    return pd.concat([borehole_a(), borehole_b()], ignore_index=True)
+    nrs = ["A", "B"]
+    xcoords = [4, 2]
+    ycoords = [2, 1]
+    surfaces = [0.2, 0.3]
+    ends = [-2.1, -1.2]
+    tops = [0.0, 0.1, 0.2, 0.7, 1.0, 1.3, 0.0, 0.5, 0.8, 1.2]
+    bottoms = [0.1, 0.2, 0.7, 1.0, 1.3, 2.3, 0.5, 0.8, 1.2, 1.5]
+    lith = [
+        "silt",
+        "zwakZandigGrind",
+        "zwakZandigSilt",
+        "zwakZandigGrind",
+        "klei",
+        "siltigZand",
+        "silt",
+        "sterkZandigGrind",
+        "zwakZandigeKlei",
+        "zand",
+    ]
 
-
-@pytest.fixture
-def sample_grid():
-    # Xarray DataArray (bbox: 0, 0, 4, 4; xmin, ymin, xmax, ymax)
-    return
-
-
-@pytest.fixture
-def seismic_geocard7_file(testdatadir: Path):
-    return testdatadir / "geocard7.dat"
-
-
-@pytest.fixture
-def seismic_xyltta_file(testdatadir: Path):
-    return testdatadir / "xylinetracetimeamplitude.dat"
+    header = gpd.GeoDataFrame(
+        {
+            "nr": nrs,
+            "x": xcoords,
+            "y": ycoords,
+            "surface": surfaces,
+            "end": ends,
+        },
+        geometry=gpd.points_from_xy(xcoords, ycoords),
+        crs=28992,
+    )
+    data = pd.DataFrame(
+        {
+            "nr": np.repeat(nrs, [6, 4]),
+            "x": np.repeat(xcoords, [6, 4]),
+            "y": np.repeat(ycoords, [6, 4]),
+            "surface": np.repeat(surfaces, [6, 4]),
+            "end": np.repeat(ends, [6, 4]),
+            "top": tops,
+            "bottom": bottoms,
+            "geotechnicalSoilName": lith,
+        }
+    )
+    return BoreholeCollection(header, data)

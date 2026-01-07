@@ -8,8 +8,9 @@ from wakatools.io import kingdom_exports
 
 
 @pytest.mark.unittest
-def test_geocard7(seismic_geocard7_file):
-    df = kingdom_exports.geocard7(seismic_geocard7_file)
+def test_geocard7(testdatadir):
+    geocard7_file = testdatadir / "geocard7.dat"
+    df = kingdom_exports.geocard7(geocard7_file)
     assert isinstance(df, pd.DataFrame)
     assert_array_equal(df["reflector"].unique(), ["1st reflector", "2nd reflector"])
     assert {"x", "y", "time", "ID"}.issubset(df.columns)
@@ -17,14 +18,15 @@ def test_geocard7(seismic_geocard7_file):
 
 
 @pytest.mark.unittest
-def test_single_horizon(seismic_xyltta_file):
-    df = kingdom_exports.single_horizon(seismic_xyltta_file)
+def test_single_horizon(testdatadir):
+    xyltta_file = testdatadir / "xylinetracetimeamplitude.dat"
+    df = kingdom_exports.single_horizon(xyltta_file)
     assert isinstance(df, pd.DataFrame)
     assert {"x", "y", "time", "ID"}.issubset(df.columns)
     assert len(df) == 4842  # Assert if all data is read
 
     df = kingdom_exports.single_horizon(
-        seismic_xyltta_file, columns=["x", "y", "ID", "trace", "time", "amplitude"]
+        xyltta_file, columns=["x", "y", "ID", "trace", "time", "amplitude"]
     )
     assert isinstance(df, pd.DataFrame)
     assert {"x", "y", "ID", "trace", "time", "amplitude"}.issubset(df.columns)
@@ -32,5 +34,5 @@ def test_single_horizon(seismic_xyltta_file):
 
     with pytest.raises(ValueError, match="Expected 5 columns, got 6"):
         kingdom_exports.single_horizon(
-            seismic_xyltta_file, columns=["x", "y", "ID", "trace", "time"]
+            xyltta_file, columns=["x", "y", "ID", "trace", "time"]
         )
