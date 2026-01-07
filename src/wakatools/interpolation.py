@@ -1,10 +1,14 @@
+import geopandas as gpd
 import numpy as np
 import pandas as pd
 import xarray as xr
 
+from wakatools.validation import validate_input
 
+
+@validate_input
 def tin_surface(
-    data: pd.DataFrame, value: str, target_grid: xr.DataArray
+    *data: pd.DataFrame | gpd.GeoDataFrame, value: str, target_grid: xr.DataArray
 ) -> xr.DataArray:
     """
     Interpolate a TIN (Triangulated Irregular Network) surface from a Pandas DataFrame
@@ -17,9 +21,9 @@ def tin_surface(
 
     Parameters
     ----------
-    data : pd.DataFrame
-        DataFrame containing 'x', 'y', and 'z' columns representing the points to
-        interpolate from.
+    data : pd.DataFrame | gpd.GeoDataFrame
+        One or more DataFrame or GeoDataFrame instances containing 'x', 'y', and 'value'
+        columns representing the points to interpolate from.
     value : str
         The name of the column in `data` that contains the values to interpolate.
     target_grid : xr.DataArray
@@ -32,6 +36,8 @@ def tin_surface(
 
     """
     from scipy.spatial import Delaunay
+
+    data = pd.concat(data, ignore_index=True)
 
     grid_points = target_grid.waka.grid_coordinates()
 
@@ -65,8 +71,12 @@ def _calculate_barycentric_coordinates(tri, simplex, points):
     return coordinates
 
 
+@validate_input
 def griddata(
-    data: pd.DataFrame, value: str, target_grid: xr.DataArray, **kwargs
+    *data: pd.DataFrame | gpd.GeoDataFrame,
+    value: str,
+    target_grid: xr.DataArray,
+    **kwargs,
 ) -> xr.DataArray:
     """
     Interpolate values from a Pandas DataFrame containing x,y,value for a set of points
@@ -74,9 +84,9 @@ def griddata(
 
     Parameters
     ----------
-    data : pd.DataFrame
-        DataFrame containing 'x', 'y', and 'z' columns representing the points to
-        interpolate from.
+    data : pd.DataFrame | gpd.GeoDataFrame
+        One or more DataFrame or GeoDataFrame instances containing 'x', 'y', and 'value'
+        columns representing the points to interpolate from.
     value : str
         The name of the column in `data` that contains the values to interpolate.
     target_grid : xr.DataArray
@@ -94,6 +104,8 @@ def griddata(
     """
     from scipy.interpolate import griddata as scipy_griddata
 
+    data = pd.concat(data, ignore_index=True)
+
     grid_points = target_grid.waka.grid_coordinates()
     interpolated = scipy_griddata(
         points=data.waka.coordinates(),
@@ -109,8 +121,12 @@ def griddata(
     )
 
 
+@validate_input
 def rbf(
-    data: pd.DataFrame, value: str, target_grid: xr.DataArray, **kwargs
+    *data: pd.DataFrame | gpd.GeoDataFrame,
+    value: str,
+    target_grid: xr.DataArray,
+    **kwargs,
 ) -> xr.DataArray:
     """
     Interpolate values from a Pandas DataFrame containing x,y,value for a set of points
@@ -118,14 +134,14 @@ def rbf(
 
     Parameters
     ----------
-    data : pd.DataFrame
-        DataFrame containing 'x', 'y', and 'z' columns representing the points to
-        interpolate from.
+    data : pd.DataFrame | gpd.GeoDataFrame
+        One or more DataFrame or GeoDataFrame instances containing 'x', 'y', and 'value'
+        columns representing the points to interpolate from.
     value : str
         The name of the column in `data` that contains the values to interpolate.
     target_grid : xr.DataArray
         Target grid as an xarray DataArray on which to interpolate the values.
-    *kwargs
+    **kwargs
         Additional keyword arguments to pass to `scipy.interpolate.RBFInterpolator`,
         such as `kernel`, `epsilon`, etc. See SciPy documentation for more details.
 
@@ -136,6 +152,8 @@ def rbf(
 
     """
     from scipy.interpolate import RBFInterpolator
+
+    data = pd.concat(data, ignore_index=True)
 
     # Use scaled coordinates for better numerical stability
     scaled_coords = data.waka.coordinates_scaled(bbox=target_grid.rio.bounds())

@@ -1,6 +1,6 @@
 import numpy as np
 import pandas as pd
-import rioxarray  # noqa: F401 (get `rio` accessor registered and ignore "unused import" warning)
+import rioxarray  # noqa: F401 (register `rio` accessor and ignore "unused import" warning)
 import xarray as xr
 
 from .utils import scaling

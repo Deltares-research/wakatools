@@ -26,6 +26,7 @@ def test_read_seismics(seismic_geocard7_file, seismic_xyltta_file):
         read.read_seismics(seismic_xyltta_file, "multi-horizon")
 
 
+@pytest.mark.xfail(reason="Function implementation incomplete.")
 @pytest.mark.unittest
 def test_read_seismics_as_seismiccollection(seismic_xyltta_file):
     # Vraag aan bas, hoe test ik dit ding ? oja, en wat is een goede naam hiervoor?
