@@ -407,21 +407,11 @@
 <span class="sd">        Interpolated values on the target grid as an xarray DataArray.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="kn">from</span><span class="w"> </span><span class="nn">scipy.spatial</span><span class="w"> </span><span class="kn">import</span> <span class="n">Delaunay</span>
-
     <span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">ignore_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
-    <span class="n">grid_points</span> <span class="o">=</span> <span class="n">target_grid</span><span class="o">.</span><span class="n">waka</span><span class="o">.</span><span class="n">grid_coordinates</span><span class="p">()</span>
-
-    <span class="n">tri</span> <span class="o">=</span> <span class="n">Delaunay</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">waka</span><span class="o">.</span><span class="n">coordinates</span><span class="p">())</span>
-    <span class="n">simplices</span> <span class="o">=</span> <span class="n">tri</span><span class="o">.</span><span class="n">find_simplex</span><span class="p">(</span><span class="n">grid_points</span><span class="p">)</span>
-    <span class="n">bary_coords</span> <span class="o">=</span> <span class="n">_calculate_barycentric_coordinates</span><span class="p">(</span><span class="n">tri</span><span class="p">,</span> <span class="n">simplices</span><span class="p">,</span> <span class="n">grid_points</span><span class="p">)</span>
-
-    <span class="n">values</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">value</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
-    <span class="n">corner_values</span> <span class="o">=</span> <span class="n">values</span><span class="p">[</span><span class="n">tri</span><span class="o">.</span><span class="n">simplices</span><span class="p">[</span><span class="n">simplices</span><span class="p">]]</span>
-
-    <span class="n">interpolated</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">corner_values</span> <span class="o">*</span> <span class="n">bary_coords</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-    <span class="n">interpolated</span><span class="p">[</span><span class="n">simplices</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>  <span class="c1"># Outside the convex hull of points</span>
+    <span class="n">interpolated</span> <span class="o">=</span> <span class="n">_tin</span><span class="p">(</span>
+        <span class="n">data</span><span class="o">.</span><span class="n">waka</span><span class="o">.</span><span class="n">coordinates</span><span class="p">(),</span> <span class="n">data</span><span class="p">[</span><span class="n">value</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">target_grid</span><span class="o">.</span><span class="n">waka</span><span class="o">.</span><span class="n">grid_coordinates</span><span class="p">()</span>
+    <span class="p">)</span>
 
     <span class="k">return</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span><span class="p">(</span>
         <span class="n">interpolated</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">target_grid</span><span class="o">.</span><span class="n">shape</span><span class="p">),</span>
@@ -431,17 +421,50 @@
 
 
 
-<span class="k">def</span><span class="w"> </span><span class="nf">_calculate_barycentric_coordinates</span><span class="p">(</span><span class="n">tri</span><span class="p">,</span> <span class="n">simplex</span><span class="p">,</span> <span class="n">points</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_tin</span><span class="p">(</span>
+    <span class="n">points</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">values</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">query_points</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Helper function for `tin_surface` to calculate barycentric coordinates for each input</span>
-<span class="sd">    point to use in TIN interpolation.</span>
+<span class="sd">    Interpolate a TIN (Triangulated Irregular Network) surface for a set of query points</span>
+<span class="sd">    based on input points and their associated values. The interpolation is done by</span>
+<span class="sd">    taking a weighted average of the values at the vertices of the enclosing triangle,</span>
+<span class="sd">    using the barycentric coordinates.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    points : np.ndarray</span>
+<span class="sd">        An array of shape (N, 2) containing the x,y coordinates of the input points.</span>
+<span class="sd">    values : np.ndarray</span>
+<span class="sd">        An array of shape (N,) containing the values associated with each input point.</span>
+<span class="sd">    query_points : np.ndarray</span>
+<span class="sd">        An array of shape (M, 2) containing the x,y coordinates of the query points to</span>
+<span class="sd">        interpolate.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    np.ndarray</span>
+<span class="sd">        An array of shape (M,) containing the interpolated values at the query points.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">x</span> <span class="o">=</span> <span class="n">tri</span><span class="o">.</span><span class="n">transform</span><span class="p">[</span><span class="n">simplex</span><span class="p">,</span> <span class="p">:</span><span class="mi">2</span><span class="p">]</span>
-    <span class="n">y</span> <span class="o">=</span> <span class="n">points</span> <span class="o">-</span> <span class="n">tri</span><span class="o">.</span><span class="n">transform</span><span class="p">[</span><span class="n">simplex</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span>
-    <span class="n">barycentric</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s2">&quot;ijk,ik-&gt;ij&quot;</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
-    <span class="n">coordinates</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">c_</span><span class="p">[</span><span class="n">barycentric</span><span class="p">,</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">barycentric</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)]</span>
-    <span class="k">return</span> <span class="n">coordinates</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">scipy.spatial</span><span class="w"> </span><span class="kn">import</span> <span class="n">Delaunay</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_calculate_barycentric_coordinates</span><span class="p">(</span><span class="n">tri</span><span class="p">,</span> <span class="n">simplex</span><span class="p">,</span> <span class="n">points</span><span class="p">):</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">tri</span><span class="o">.</span><span class="n">transform</span><span class="p">[</span><span class="n">simplex</span><span class="p">,</span> <span class="p">:</span><span class="mi">2</span><span class="p">]</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">points</span> <span class="o">-</span> <span class="n">tri</span><span class="o">.</span><span class="n">transform</span><span class="p">[</span><span class="n">simplex</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span>
+        <span class="n">barycentric</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s2">&quot;ijk,ik-&gt;ij&quot;</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+        <span class="n">coordinates</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">c_</span><span class="p">[</span><span class="n">barycentric</span><span class="p">,</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">barycentric</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)]</span>
+        <span class="k">return</span> <span class="n">coordinates</span>
+
+    <span class="n">tri</span> <span class="o">=</span> <span class="n">Delaunay</span><span class="p">(</span><span class="n">points</span><span class="p">)</span>
+    <span class="n">simplices</span> <span class="o">=</span> <span class="n">tri</span><span class="o">.</span><span class="n">find_simplex</span><span class="p">(</span><span class="n">query_points</span><span class="p">)</span>
+    <span class="n">bary_coords</span> <span class="o">=</span> <span class="n">_calculate_barycentric_coordinates</span><span class="p">(</span><span class="n">tri</span><span class="p">,</span> <span class="n">simplices</span><span class="p">,</span> <span class="n">query_points</span><span class="p">)</span>
+
+    <span class="n">corner_values</span> <span class="o">=</span> <span class="n">values</span><span class="p">[</span><span class="n">tri</span><span class="o">.</span><span class="n">simplices</span><span class="p">[</span><span class="n">simplices</span><span class="p">]]</span>
+
+    <span class="n">interpolated</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nansum</span><span class="p">(</span><span class="n">corner_values</span> <span class="o">*</span> <span class="n">bary_coords</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">interpolated</span><span class="p">[</span><span class="n">simplices</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>  <span class="c1"># Outside the convex hull of points</span>
+
+    <span class="k">return</span> <span class="n">interpolated</span>
 
 
 <div class="viewcode-block" id="griddata">

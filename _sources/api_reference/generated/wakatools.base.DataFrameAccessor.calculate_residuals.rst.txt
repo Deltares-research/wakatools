@@ -1,0 +1,6 @@
+﻿wakatools.base.DataFrameAccessor.calculate\_residuals
+=====================================================
+
+.. currentmodule:: wakatools.base
+
+.. automethod:: DataFrameAccessor.calculate_residuals

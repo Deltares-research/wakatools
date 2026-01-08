@@ -481,6 +481,42 @@
         <span class="kn">from</span><span class="w"> </span><span class="nn">geost.spatial</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_raster_values</span>
 
         <span class="k">return</span> <span class="n">get_raster_values</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_df</span><span class="p">[</span><span class="s2">&quot;x&quot;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">_df</span><span class="p">[</span><span class="s2">&quot;y&quot;</span><span class="p">],</span> <span class="n">raster</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="DataFrameAccessor.calculate_residuals">
+<a class="viewcode-back" href="../../api_reference/generated/wakatools.base.DataFrameAccessor.calculate_residuals.html#wakatools.base.DataFrameAccessor.calculate_residuals">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">calculate_residuals</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">value</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">raster</span><span class="p">:</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculate residuals between the values in the DataFrame and the raster values at</span>
+<span class="sd">        the DataFrame coordinates. The raster values at the DataFrame coordinates are</span>
+<span class="sd">        obtained using TIN interpolation.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        value : str</span>
+<span class="sd">            The column name in the DataFrame containing the values to compare against the</span>
+<span class="sd">            raster.</span>
+<span class="sd">        raster : xr.DataArray</span>
+<span class="sd">            The raster DataArray to compare against.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        np.ndarray</span>
+<span class="sd">            An array of residuals (raster value - DataFrame value) for each point in the</span>
+<span class="sd">            DataFrame.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">wakatools.interpolation</span><span class="w"> </span><span class="kn">import</span> <span class="n">_tin</span>
+
+        <span class="n">raster_at_coords</span> <span class="o">=</span> <span class="n">_tin</span><span class="p">(</span>
+            <span class="n">raster</span><span class="o">.</span><span class="n">waka</span><span class="o">.</span><span class="n">grid_coordinates</span><span class="p">(),</span> <span class="n">raster</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">ravel</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span><span class="p">()</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="p">(</span><span class="n">raster_at_coords</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_df</span><span class="p">[</span><span class="n">value</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">)</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span></div>
 </div>
 
 
