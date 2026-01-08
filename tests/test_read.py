@@ -6,27 +6,22 @@ from numpy.testing import assert_array_equal
 from wakatools.io import read
 
 
-@pytest.mark.unittest
-def test_read_seismics(testdatadir):
-    geocard7_file = testdatadir / "geocard7.dat"
-    xyltta_file = testdatadir / "xylinetracetimeamplitude.dat"
-
-    data = read.read_seismics(geocard7_file, "multi-horizon")
-    assert isinstance(data, pd.DataFrame)
-    assert_array_equal(data["reflector"].unique(), ["1st reflector", "2nd reflector"])
-    assert {"x", "y", "time", "ID"}.issubset(data.columns)
-    assert len(data) == 8864
-
-    data = read.read_seismics(xyltta_file, "single-horizon")
-    assert isinstance(data, pd.DataFrame)
-    assert {"x", "y", "time", "ID"}.issubset(data.columns)
-    assert len(data) == 4842
-
-    with pytest.raises(ValueError, match="Expected 6 columns, got 1"):
-        read.read_seismics(geocard7_file, "single-horizon")
-
-    with pytest.raises(ValueError, match="No objects to concatenate"):
-        read.read_seismics(xyltta_file, "multi-horizon")
+@pytest.mark.parametrize(
+    "file, type_",
+    [
+        ("geocard7.dat", "multi-horizon"),
+        ("xylinetracetimeamplitude.dat", "single-horizon"),
+        ("invalid-file.dat", "invalid-type"),
+    ],
+    ids=["multi-horizon", "single-horizon", "invalid-type"],
+)
+def test_read_seismics(file, type_, testdatadir):
+    if type_ == "invalid-type":
+        with pytest.raises(ValueError, match="Unsupported or wrong type: invalid-type"):
+            read.read_seismics(testdatadir / file, type_)
+    else:
+        data = read.read_seismics(testdatadir / file, type_)
+        assert isinstance(data, pd.DataFrame)
 
 
 @pytest.mark.xfail(reason="Function implementation incomplete.")

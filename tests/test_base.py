@@ -4,7 +4,7 @@ import pytest
 import xarray as xr
 from numpy.testing import assert_array_almost_equal
 
-import wakatools  # Make sure "waka" accessor is available
+import wakatools as waka  # Make sure "waka" accessor is available
 
 
 @pytest.fixture
@@ -15,6 +15,23 @@ def invalid_dataarray():
 @pytest.fixture
 def invalid_dataframe():
     return pd.DataFrame({"a": [1, 2], "b": [3, 4]})
+
+
+@pytest.fixture
+def interpolation_result():
+    xcoords = np.arange(5) + 0.5
+    ycoords = np.arange(5, 0, -1) - 0.5
+    return xr.DataArray(
+        [
+            [np.nan, -1.3, -1.1, -0.9, -0.6],
+            [-0.9, -1.1, -1.1, -0.7, -0.4],
+            [-0.7, -0.9, -1.2, -0.9, -0.3],
+            [-0.5, -0.3, -0.9, -0.8, np.nan],
+            [-0.5, -0.1, -0.1, np.nan, np.nan],
+        ],
+        coords={"x": xcoords, "y": ycoords},
+        dims=["y", "x"],
+    )
 
 
 class TestDataFrameAccessor:
@@ -101,6 +118,16 @@ class TestDataFrameAccessor:
         assert_array_almost_equal(
             values,
             [0.1, 0.3, 0.5, 0.4, 0.4, 0.4, 0.6, 0.5, 0.1, 0.7],
+        )
+
+    @pytest.mark.unittest
+    def test_calculate_residuals(self, xyz_dataframe, interpolation_result):
+        residuals = xyz_dataframe.waka.calculate_residuals(
+            value="z", raster=interpolation_result
+        )
+        assert isinstance(residuals, np.ndarray)
+        assert_array_almost_equal(
+            residuals, [np.nan, 0.06, 0.4, np.nan, np.nan, 0.02, 0.0, -0.26, 0.14, 0.2]
         )
 
 

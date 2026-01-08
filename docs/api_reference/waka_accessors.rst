@@ -33,6 +33,7 @@ Once wakatools is imported you can access the ``waka`` accessor on any Pandas Da
 
    DataFrameAccessor
    DataFrameAccessor.bounds
+   DataFrameAccessor.calculate_residuals
    DataFrameAccessor.coordinates
    DataFrameAccessor.coordinates_scaled
    DataFrameAccessor.get_raster_values

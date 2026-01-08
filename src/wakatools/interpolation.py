@@ -35,21 +35,11 @@ def tin_surface(
         Interpolated values on the target grid as an xarray DataArray.
 
     """
-    from scipy.spatial import Delaunay
-
     data = pd.concat(data, ignore_index=True)
 
-    grid_points = target_grid.waka.grid_coordinates()
-
-    tri = Delaunay(data.waka.coordinates())
-    simplices = tri.find_simplex(grid_points)
-    bary_coords = _calculate_barycentric_coordinates(tri, simplices, grid_points)
-
-    values = data[value].values
-    corner_values = values[tri.simplices[simplices]]
-
-    interpolated = np.sum(corner_values * bary_coords, axis=1)
-    interpolated[simplices < 0] = np.nan  # Outside the convex hull of points
+    interpolated = _tin(
+        data.waka.coordinates(), data[value].values, target_grid.waka.grid_coordinates()
+    )
 
     return xr.DataArray(
         interpolated.reshape(target_grid.shape),
@@ -58,17 +48,50 @@ def tin_surface(
     )
 
 
-def _calculate_barycentric_coordinates(tri, simplex, points):
+def _tin(
+    points: np.ndarray, values: np.ndarray, query_points: np.ndarray
+) -> np.ndarray:
     """
-    Helper function for `tin_surface` to calculate barycentric coordinates for each input
-    point to use in TIN interpolation.
+    Interpolate a TIN (Triangulated Irregular Network) surface for a set of query points
+    based on input points and their associated values. The interpolation is done by
+    taking a weighted average of the values at the vertices of the enclosing triangle,
+    using the barycentric coordinates.
+
+    Parameters
+    ----------
+    points : np.ndarray
+        An array of shape (N, 2) containing the x,y coordinates of the input points.
+    values : np.ndarray
+        An array of shape (N,) containing the values associated with each input point.
+    query_points : np.ndarray
+        An array of shape (M, 2) containing the x,y coordinates of the query points to
+        interpolate.
+
+    Returns
+    -------
+    np.ndarray
+        An array of shape (M,) containing the interpolated values at the query points.
 
     """
-    x = tri.transform[simplex, :2]
-    y = points - tri.transform[simplex, 2]
-    barycentric = np.einsum("ijk,ik->ij", x, y)
-    coordinates = np.c_[barycentric, 1 - barycentric.sum(axis=1)]
-    return coordinates
+    from scipy.spatial import Delaunay
+
+    def _calculate_barycentric_coordinates(tri, simplex, points):
+        x = tri.transform[simplex, :2]
+        y = points - tri.transform[simplex, 2]
+        barycentric = np.einsum("ijk,ik->ij", x, y)
+        coordinates = np.c_[barycentric, 1 - barycentric.sum(axis=1)]
+        return coordinates
+
+    tri = Delaunay(points)
+    simplices = tri.find_simplex(query_points)
+    bary_coords = _calculate_barycentric_coordinates(tri, simplices, query_points)
+
+    corner_values = values[tri.simplices[simplices]]
+
+    interpolated = np.nansum(corner_values * bary_coords, axis=1)
+    interpolated[simplices < 0] = np.nan  # Outside the convex hull of points
+
+    return interpolated
 
 
 @validate_input

@@ -96,6 +96,39 @@ class DataFrameAccessor:
 
         return get_raster_values(self._df["x"], self._df["y"], raster)
 
+    def calculate_residuals(
+        self,
+        value: str,
+        raster: xr.DataArray,
+    ) -> np.ndarray:
+        """
+        Calculate residuals between the values in the DataFrame and the raster values at
+        the DataFrame coordinates. The raster values at the DataFrame coordinates are
+        obtained using TIN interpolation.
+
+        Parameters
+        ----------
+        value : str
+            The column name in the DataFrame containing the values to compare against the
+            raster.
+        raster : xr.DataArray
+            The raster DataArray to compare against.
+
+        Returns
+        -------
+        np.ndarray
+            An array of residuals (raster value - DataFrame value) for each point in the
+            DataFrame.
+
+        """
+        from wakatools.interpolation import _tin
+
+        raster_at_coords = _tin(
+            raster.waka.grid_coordinates(), raster.values.ravel(), self.coordinates()
+        )
+
+        return (raster_at_coords - self._df[value].values).round(3)
+
 
 @xr.register_dataarray_accessor("waka")
 class DataArrayAccessor:
