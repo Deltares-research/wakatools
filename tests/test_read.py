@@ -7,31 +7,18 @@ from wakatools.io import read
 
 
 @pytest.mark.parametrize(
-    "file, type_",
-    [
-        ("geocard7.dat", "multi-horizon"),
-        ("xylinetracetimeamplitude.dat", "single-horizon"),
-        ("invalid-file.dat", "invalid-type"),
-    ],
+    "file",
+    ["geocard7.dat", "xylinetracetimeamplitude.dat", "invalid-file.dat"],
     ids=["multi-horizon", "single-horizon", "invalid-type"],
 )
-def test_read_seismics(file, type_, testdatadir):
+def test_read_seismics(file, request, testdatadir):
+    type_ = request.node.callspec.id
     if type_ == "invalid-type":
         with pytest.raises(ValueError, match="Unsupported or wrong type: invalid-type"):
             read.read_seismics(testdatadir / file, type_)
     else:
         data = read.read_seismics(testdatadir / file, type_)
         assert isinstance(data, pd.DataFrame)
-
-
-@pytest.mark.xfail(reason="Function implementation incomplete.")
-@pytest.mark.unittest
-def test_read_seismics_as_seismiccollection(testdatadir):
-    # Vraag aan bas, hoe test ik dit ding ? oja, en wat is een goede naam hiervoor?
-    xyltta_file = testdatadir / "xylinetracetimeamplitude.dat"
-    collection = read.read_seismics_as_SeismicCollection(xyltta_file, "single-horizon")
-    print(collection)  # zodat ie niet gaat zeuren
-    assert 1 == 1
 
 
 @pytest.mark.unittest

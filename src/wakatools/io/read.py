@@ -29,7 +29,8 @@ def read_seismics(
     **kwargs,
 ):
     """
-    General reader for seismic data files. Provides support for multiple Kingdom export formats via dedicated readers.
+    General reader for seismic data files. Provides support for multiple Kingdom export
+    formats via dedicated readers.
 
     Parameters
     ----------
@@ -58,23 +59,6 @@ def read_seismics(
         raise ValueError(f"Unsupported or wrong type: {type_}")
 
     return reader(files, **kwargs)
-
-
-def read_seismics_as_seismiccollection(
-    files: str | Path | Iterable[str | Path],
-    type_: SeismicFile,
-    **kwargs,
-):
-    # Vraag aan bas: kan dit dan ook in read_seismics, is dat handig ?
-    # en miss een andere n aam want dit ziet er niet uit maar ik heb even geen inspiratie
-    from wakatools.parameters import SeismicCollection
-
-    seismic_data = read_seismics(
-        files,
-        type_,
-    )
-
-    return SeismicCollection(seismic_data)
 
 
 def read_borehole_xml(
