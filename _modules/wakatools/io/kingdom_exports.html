@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>wakatools.io.read &#8212; Wakatools  documentation</title>
+    <title>wakatools.io.kingdom_exports &#8212; Wakatools  documentation</title>
   
   
   
@@ -44,7 +44,7 @@
     <script src="../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/wakatools/io/read';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/wakatools/io/kingdom_exports';</script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
@@ -350,7 +350,7 @@
     
     <li class="breadcrumb-item"><a href="../../index.html" class="nav-link">Module code</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">wakatools.io.read</span></li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">wakatools.io.kingdom_exports</span></li>
   </ul>
 </nav>
 </div>
@@ -367,131 +367,123 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <h1>Source code for wakatools.io.read</h1><div class="highlight"><pre>
+  <h1>Source code for wakatools.io.kingdom_exports</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">partial</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">collections.abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">Sequence</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">Literal</span>
 
-<span class="kn">import</span><span class="w"> </span><span class="nn">geost</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 
-<span class="kn">from</span><span class="w"> </span><span class="nn">wakatools.io</span><span class="w"> </span><span class="kn">import</span> <span class="n">kingdom_exports</span>
-
-<span class="n">BOREHOLE_READERS</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s2">&quot;geotechnical&quot;</span><span class="p">:</span> <span class="n">geost</span><span class="o">.</span><span class="n">read_bhrgt</span><span class="p">,</span>
-    <span class="s2">&quot;geological&quot;</span><span class="p">:</span> <span class="n">geost</span><span class="o">.</span><span class="n">read_bhrg</span><span class="p">,</span>
-    <span class="s2">&quot;pedological&quot;</span><span class="p">:</span> <span class="n">geost</span><span class="o">.</span><span class="n">read_bhrp</span><span class="p">,</span>
-<span class="p">}</span>
-<span class="n">BoreholeType</span> <span class="o">=</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;geotechnical&quot;</span><span class="p">,</span> <span class="s2">&quot;geological&quot;</span><span class="p">,</span> <span class="s2">&quot;pedological&quot;</span><span class="p">]</span>
-
-<span class="n">SEISMIC_READERS</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s2">&quot;multi-horizon&quot;</span><span class="p">:</span> <span class="n">kingdom_exports</span><span class="o">.</span><span class="n">geocard7</span><span class="p">,</span>
-    <span class="s2">&quot;single-horizon&quot;</span><span class="p">:</span> <span class="n">kingdom_exports</span><span class="o">.</span><span class="n">single_horizon</span><span class="p">,</span>
+<span class="n">COLUMN_DTYPE_SCHEMA</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;x&quot;</span><span class="p">:</span> <span class="s2">&quot;float64&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;y&quot;</span><span class="p">:</span> <span class="s2">&quot;float64&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="s2">&quot;float64&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;ID&quot;</span><span class="p">:</span> <span class="s2">&quot;String&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;reflector&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
 <span class="p">}</span>
 
-<span class="n">SeismicFile</span> <span class="o">=</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;single-horizon&quot;</span><span class="p">,</span> <span class="s2">&quot;multi-horizon&quot;</span><span class="p">]</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_apply_column_dtypes</span><span class="p">(</span><span class="n">df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">column</span><span class="p">,</span> <span class="n">dtype</span> <span class="ow">in</span> <span class="n">COLUMN_DTYPE_SCHEMA</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">column</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+            <span class="n">df</span><span class="p">[</span><span class="n">column</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">column</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">dtype</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">df</span>
 
 
-<div class="viewcode-block" id="read_seismics">
-<a class="viewcode-back" href="../../../api_reference/generated/wakatools.read_seismics.html#wakatools.read_seismics">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">read_seismics</span><span class="p">(</span>
-    <span class="n">files</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">Path</span> <span class="o">|</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">str</span> <span class="o">|</span> <span class="n">Path</span><span class="p">],</span>
-    <span class="n">type_</span><span class="p">:</span> <span class="n">SeismicFile</span><span class="p">,</span>
-    <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
-<span class="p">):</span>
+<div class="viewcode-block" id="geocard7">
+<a class="viewcode-back" href="../../../api_reference/generated/wakatools.io.kingdom_exports.geocard7.html#wakatools.io.kingdom_exports.geocard7">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">geocard7</span><span class="p">(</span><span class="n">filename</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    General reader for seismic data files. Provides support for multiple Kingdom export</span>
-<span class="sd">    formats via dedicated readers.</span>
+<span class="sd">    Parse a Kingdom Geocard7 seismic export file and return a DataFrame</span>
+<span class="sd">    containing the seismic data.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    files : str | Path | Iterable[str  |  Path]</span>
-<span class="sd">        Seismic data files</span>
-<span class="sd">    type_ : SeismicFile, optional</span>
-<span class="sd">        Type of seismic data file, this can be single-horizon or</span>
-<span class="sd">        multi-horizon. Type of data file is based on the export method:</span>
-<span class="sd">        multi-horizon = Kingdom Geocard7 export, single-horizon = Kingdom</span>
-<span class="sd">        “X Y Line Trace Time Amplitude” export.</span>
-
-<span class="sd">        Supported files types:</span>
-<span class="sd">        - multi-horizon</span>
-<span class="sd">        - single-horizon</span>
+<span class="sd">    filename : str</span>
+<span class="sd">        Path to the Geocard7 seismic export file.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    DataFrame</span>
-<span class="sd">        DataFrame with seismic data from file. Format is based on input type,</span>
-<span class="sd">        contains at least columns: [x, y, ID, time]</span>
+<span class="sd">    pd.DataFrame</span>
+<span class="sd">        DataFrame containing the seismic data.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+
+    <span class="c1"># Match sections starting with PROFILE and capturing up to EOD</span>
+    <span class="n">pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;(PROFILE.*?)(?=PROFILE|EOD|$)&quot;</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">DOTALL</span><span class="p">)</span>
+    <span class="n">matches</span> <span class="o">=</span> <span class="n">pattern</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+
+    <span class="n">all_horizons</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">horizon</span> <span class="ow">in</span> <span class="n">matches</span><span class="p">:</span>
+        <span class="n">lines</span> <span class="o">=</span> <span class="n">horizon</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">lines</span><span class="p">[</span><span class="mi">2</span><span class="p">:]</span>
+        <span class="n">title</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;PROFILE\s+(.*?)\s*\(&quot;</span><span class="p">,</span> <span class="n">lines</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">title</span><span class="p">:</span>
+            <span class="n">horizon_name</span> <span class="o">=</span> <span class="n">title</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">horizon_name</span> <span class="o">=</span> <span class="s2">&quot;unknown&quot;</span>
+
+        <span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">([</span><span class="n">d</span><span class="o">.</span><span class="n">split</span><span class="p">()</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">data</span><span class="p">])</span>
+        <span class="n">data</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="s2">&quot;x&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;y&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;time&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;pointcount&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;pointcountint&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;amplitude&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;noclue&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;ID&quot;</span><span class="p">,</span>
+        <span class="p">]</span>
+
+        <span class="n">data</span><span class="p">[</span><span class="s2">&quot;reflector&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">horizon_name</span>
+        <span class="n">all_horizons</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">all_horizons</span><span class="p">,</span> <span class="n">ignore_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="single_horizon">
+<a class="viewcode-back" href="../../../api_reference/generated/wakatools.io.kingdom_exports.single_horizon.html#wakatools.io.kingdom_exports.single_horizon">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">single_horizon</span><span class="p">(</span>
+    <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">Path</span><span class="p">,</span>
+    <span class="n">columns</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Reads a Kingdom export file containing data from a single seismic horizon into a</span>
+<span class="sd">    DataFrame.</span>
+<span class="sd">    The export is expected to be of type “X Y Line Trace Time Amplitude”.</span>
+<span class="sd">    Custom column names can be provided for alternative export formats.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    filename : str | Path</span>
+<span class="sd">            Path to the Kingdom export file</span>
+<span class="sd">    columns : Sequence[str] | None, optional &#39;X Y Line Trace Time Amplitude&#39;</span>
+<span class="sd">        Optional input for column names if export is different, by default None</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    pd.DataFrame</span>
+<span class="sd">        DataFrame containing the seismic data.</span>
 
 <span class="sd">    Raises</span>
 <span class="sd">    ------</span>
 <span class="sd">    ValueError</span>
-<span class="sd">        If input file is (yet) unsupported.</span>
+<span class="sd">        If length of the columns do not match the dataframe length, raise ValueError.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">reader</span> <span class="o">=</span> <span class="n">SEISMIC_READERS</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">type_</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">reader</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unsupported or wrong type: </span><span class="si">{</span><span class="n">type_</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
 
-    <span class="k">return</span> <span class="n">reader</span><span class="p">(</span><span class="n">files</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+    <span class="k">if</span> <span class="n">columns</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="s2">&quot;ID&quot;</span><span class="p">,</span> <span class="s2">&quot;trace&quot;</span><span class="p">,</span> <span class="s2">&quot;time&quot;</span><span class="p">,</span> <span class="s2">&quot;amplitude&quot;</span><span class="p">]</span>
 
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">columns</span><span class="p">)</span> <span class="o">!=</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Expected </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">columns</span><span class="p">)</span><span class="si">}</span><span class="s2"> columns, got </span><span class="si">{</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
-
-<div class="viewcode-block" id="read_borehole_xml">
-<a class="viewcode-back" href="../../../api_reference/generated/wakatools.read_borehole_xml.html#wakatools.read_borehole_xml">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">read_borehole_xml</span><span class="p">(</span>
-    <span class="n">files</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">Path</span> <span class="o">|</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">str</span> <span class="o">|</span> <span class="n">Path</span><span class="p">],</span>
-    <span class="n">type_</span><span class="p">:</span> <span class="n">BoreholeType</span> <span class="o">=</span> <span class="s2">&quot;geotechnical&quot;</span><span class="p">,</span>
-    <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">geost</span><span class="o">.</span><span class="n">BoreholeCollection</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Read XML files containing borehole information. The type of data can be one of</span>
-<span class="sd">    &quot;geotechnical&quot;, &quot;geological&quot;, or &quot;pedological&quot; borehole XML files.</span>
-
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    files : str | Path | Iterable[str  |  Path]</span>
-<span class="sd">        XML file or files containing the borehole data to read.</span>
-<span class="sd">    type_ : BoreholeType, optional</span>
-<span class="sd">        The type of borehole data to read. Can be one of &quot;geotechnical&quot;, &quot;geological&quot;,</span>
-<span class="sd">        or &quot;pedological&quot;. The default is &quot;geotechnical&quot;. Each different data type use</span>
-<span class="sd">        the specific reader function from the GeoST library. See the relevant documentation</span>
-<span class="sd">        for more information and usage details.</span>
-<span class="sd">    **kwargs</span>
-<span class="sd">        Additional keyword arguments to pass to the specific reader function.</span>
-
-<span class="sd">        GeoST readers:</span>
-<span class="sd">        - geost.read_bhrgt: for &quot;geotechnical&quot; borehole XML files.</span>
-<span class="sd">        - geost.read_bhrg: for &quot;geological&quot; borehole XML files.</span>
-<span class="sd">        - geost.read_bhrp: for &quot;pedological&quot; borehole XML files.</span>
-
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    `geost.BoreholeCollection`</span>
-<span class="sd">        GeoST BoreholeCollection containing the borehole data.</span>
-
-<span class="sd">    Raises</span>
-<span class="sd">    ------</span>
-<span class="sd">    ValueError</span>
-<span class="sd">        If an unsupported borehole type is provided.</span>
-
-<span class="sd">    Examples</span>
-<span class="sd">    --------</span>
-<span class="sd">    For reading geotechnical borehole XML files from the Basis Registratie Ondergrond (BRO):</span>
-
-<span class="sd">    &gt;&gt;&gt; files = [&quot;borehole1.xml&quot;, &quot;borehole2.xml&quot;] # list of XML files from the BRO</span>
-<span class="sd">    &gt;&gt;&gt; cores = read_borehole_xml(files, type_=&quot;geotechnical&quot;)</span>
-
-<span class="sd">    See the GeoST documentation for more details on the specific reader functions and for</span>
-<span class="sd">    options for files from other sources than the BRO.</span>
-
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">reader</span> <span class="o">=</span> <span class="n">BOREHOLE_READERS</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">type_</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">reader</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unsupported borehole type: </span><span class="si">{</span><span class="n">type_</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-
-    <span class="k">return</span> <span class="n">reader</span><span class="p">(</span><span class="n">files</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+    <span class="n">data</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">columns</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">data</span></div>
 
 </pre></div>
 

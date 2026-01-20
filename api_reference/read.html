@@ -327,6 +327,8 @@
 <li class="toctree-l1 current active has-children"><a class="current reference internal" href="#">Input/Output</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="generated/wakatools.read_borehole_xml.html">wakatools.read_borehole_xml</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/wakatools.read_seismics.html">wakatools.read_seismics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/wakatools.io.kingdom_exports.geocard7.html">wakatools.io.kingdom_exports.geocard7</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/wakatools.io.kingdom_exports.single_horizon.html">wakatools.io.kingdom_exports.single_horizon</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="interpolation.html">Interpolation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
@@ -434,6 +436,22 @@ geospatial and geological applications.</p>
 </tbody>
 </table>
 </div>
+<section id="readers-for-kingdom-export-files">
+<h3>Readers for Kingdom export files<a class="headerlink" href="#readers-for-kingdom-export-files" title="Link to this heading">#</a></h3>
+<p>Parsers for different types of The Kingdom Software exports. These parsers function as
+input for <a class="reference internal" href="generated/wakatools.read_seismics.html#wakatools.read_seismics" title="wakatools.read_seismics"><code class="xref py py-func docutils literal notranslate"><span class="pre">wakatools.read_seismics()</span></code></a></p>
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/wakatools.io.kingdom_exports.geocard7.html#wakatools.io.kingdom_exports.geocard7" title="wakatools.io.kingdom_exports.geocard7"><code class="xref py py-obj docutils literal notranslate"><span class="pre">geocard7</span></code></a>(filename)</p></td>
+<td><p>Parse a Kingdom Geocard7 seismic export file and return a DataFrame containing the seismic data.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/wakatools.io.kingdom_exports.single_horizon.html#wakatools.io.kingdom_exports.single_horizon" title="wakatools.io.kingdom_exports.single_horizon"><code class="xref py py-obj docutils literal notranslate"><span class="pre">single_horizon</span></code></a>(filename[, columns])</p></td>
+<td><p>Reads a Kingdom export file containing data from a single seismic horizon into a DataFrame.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
 </section>
 </section>
 
@@ -485,7 +503,10 @@ geospatial and geological applications.</p>
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#borehole-data">Borehole data</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#seismic-data">Seismic data</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#seismic-data">Seismic data</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#readers-for-kingdom-export-files">Readers for Kingdom export files</a></li>
+</ul>
+</li>
 </ul>
   </nav></div>
 

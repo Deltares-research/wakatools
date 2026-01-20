@@ -1,0 +1,6 @@
+﻿wakatools.io.kingdom\_exports.geocard7
+======================================
+
+.. currentmodule:: wakatools.io.kingdom_exports
+
+.. autofunction:: geocard7
