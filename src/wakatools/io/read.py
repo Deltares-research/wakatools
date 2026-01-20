@@ -42,6 +42,10 @@ def read_seismics(
         multi-horizon = Kingdom Geocard7 export, single-horizon = Kingdom
         “X Y Line Trace Time Amplitude” export.
 
+        Supported files types:
+        - multi-horizon
+        - single-horizon
+
     Returns
     -------
     DataFrame
