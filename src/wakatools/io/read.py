@@ -1,12 +1,10 @@
-import re
-from functools import partial
 from pathlib import Path
 from typing import Iterable, Literal
 
 import geost
-import pandas as pd
 
 from wakatools.io import kingdom_exports
+from wakatools.utils.spatial import buffer_bbox
 
 BOREHOLE_READERS = {
     "geotechnical": geost.read_bhrgt,
@@ -117,3 +115,30 @@ def read_borehole_xml(
         raise ValueError(f"Unsupported borehole type: {type_}")
 
     return reader(files, **kwargs)
+
+
+def bro_cpts_in(bbox: tuple[float, float, float, float], buffer: int | float = None):
+    if buffer is not None:
+        bbox = buffer_bbox(bbox, buffer)
+
+    cpts = geost.bro_api_read("CPT", bbox=bbox)
+
+    return cpts
+
+
+def bro_bhrgt_in(bbox: tuple[float, float, float, float], buffer: int | float = None):
+    if buffer is not None:
+        bbox = buffer_bbox(bbox, buffer)
+
+    bhrgt = geost.bro_api_read("BHR-GT", bbox=bbox)
+
+    return bhrgt
+
+
+def bro_bhrg_in(bbox: tuple[float, float, float, float], buffer: int | float = None):
+    if buffer is not None:
+        bbox = buffer_bbox(bbox, buffer)
+
+    bhrg = geost.bro_api_read("BHR-G", bbox=bbox)
+
+    return bhrg

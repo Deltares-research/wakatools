@@ -30,3 +30,33 @@ def test_read_borehole_xml(testdatadir):
 
     with pytest.raises(ValueError, match="Unsupported borehole type: unsupported_type"):
         read.read_borehole_xml(files, type_="unsupported_type")
+
+
+@pytest.mark.parametrize(
+    "buffer, ncpts", [(None, 1), (110, 2)], ids=["no-buffer", "with-buffer"]
+)
+def test_bro_cpts_in(buffer, ncpts):
+    bbox = (132781.52, 448029.34, 132783.52, 448031.34)
+    cpts = read.bro_cpts_in(bbox=bbox, buffer=buffer)
+    assert isinstance(cpts, geost.CptCollection)
+    assert len(cpts) == ncpts
+
+
+@pytest.mark.parametrize(
+    "buffer, nbhrgt", [(None, 1), (110, 2)], ids=["no-buffer", "with-buffer"]
+)
+def test_bro_bhrgt_in(buffer, nbhrgt):
+    bbox = (132780.327, 448030.0, 132782.327, 448032.1)
+    bhrgt = read.bro_bhrgt_in(bbox=bbox, buffer=buffer)
+    assert isinstance(bhrgt, geost.BoreholeCollection)
+    assert len(bhrgt) == nbhrgt
+
+
+@pytest.mark.parametrize(
+    "buffer, nbhrg", [(None, 1), (10, 3)], ids=["no-buffer", "with-buffer"]
+)
+def test_bro_bhrg_in(buffer, nbhrg):
+    bbox = (126148, 452161, 126150, 452163)
+    bhrg = read.bro_bhrg_in(bbox=bbox, buffer=buffer)
+    assert isinstance(bhrg, geost.BoreholeCollection)
+    assert len(bhrg) == nbhrg

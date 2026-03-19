@@ -126,8 +126,8 @@ class DataFrameAccessor:
         raster_at_coords = _tin(
             raster.waka.grid_coordinates(), raster.values.ravel(), self.coordinates()
         )
-
-        return (raster_at_coords - self._df[value].values).round(3)
+        residuals = (raster_at_coords - self._df[value].values).round(3)
+        return residuals
 
 
 @xr.register_dataarray_accessor("waka")

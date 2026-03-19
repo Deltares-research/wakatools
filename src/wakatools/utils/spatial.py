@@ -69,3 +69,10 @@ def target_grid_from(xyz: pd.DataFrame, resolution: int | float) -> xr.DataArray
     X, _ = np.meshgrid(xgrid, ygrid)  # noqa: N806
 
     return xr.DataArray(np.zeros_like(X), coords=(ygrid, xgrid), dims=("y", "x"))
+
+
+def buffer_bbox(bbox: BBox, buffer: int | float) -> BBox:
+    from shapely import box
+
+    new_bbox = box(*bbox).buffer(buffer)
+    return new_bbox.bounds
