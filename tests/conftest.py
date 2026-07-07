@@ -5,7 +5,8 @@ import numpy as np
 import pandas as pd
 import pytest
 import xarray as xr
-from geost import BoreholeCollection, spatial
+from geost import Collection
+from geost.utils import spatial
 
 
 @pytest.fixture
@@ -134,4 +135,4 @@ def boreholes():
             "geotechnicalSoilName": lith,
         }
     )
-    return BoreholeCollection(header, data)
+    return Collection(data, header=header)

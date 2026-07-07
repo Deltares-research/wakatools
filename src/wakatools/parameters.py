@@ -1,17 +1,17 @@
 import pandas as pd
-from geost.base import BoreholeCollection
+from geost import Collection
 
 
 def top_layer(
-    data: BoreholeCollection | pd.DataFrame, column: str, lith: str
-) -> BoreholeCollection | pd.DataFrame:
+    data: Collection | pd.DataFrame, column: str, lith: str
+) -> Collection | pd.DataFrame:
     """
     Returns the top layer of a specified lithology.
 
     Parameters
     ----------
-    data : BoreholeCollection | pd.DataFrame
-        Borehole data in either a BoreholeCollection or a DataFrame format*.
+    data : Collection | pd.DataFrame
+        Borehole data in either a Collection or a DataFrame format*.
         *not implemented for DataFrame yet.
     column : str
         The name of the column to filter on.
@@ -20,7 +20,7 @@ def top_layer(
 
     Returns
     -------
-    BoreholeCollection | pd.DataFrame
+    Collection | pd.DataFrame
         The top layer of the specified lithology.
 
     """
@@ -39,15 +39,15 @@ def top_layer(
 
 
 def base_layer(
-    data: BoreholeCollection | pd.DataFrame, column: str, lith: str
-) -> BoreholeCollection | pd.DataFrame:
+    data: Collection | pd.DataFrame, column: str, lith: str
+) -> Collection | pd.DataFrame:
     """
     Returns the base layer of a specified lithology.
 
     Parameters
     ----------
-    data : BoreholeCollection | pd.DataFrame
-        Borehole data in either a BoreholeCollection or a DataFrame format*.
+    data : Collection | pd.DataFrame
+        Borehole data in either a Collection or a DataFrame format*.
         *not implemented for DataFrame yet.
     column : str
         The name of the column to filter on.
@@ -55,8 +55,8 @@ def base_layer(
         The value in the column to filter for.
     Returns
     -------
-    BoreholeCollection | pd.DataFrame
-        The top layer of the specified lithology.
+    Collection | pd.DataFrame
+        The base layer of the specified lithology.
 
     """
     if hasattr(data, "get_layer_base"):

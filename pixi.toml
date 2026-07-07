@@ -19,6 +19,7 @@ python = ">=3.12"
 pip = "*"
 numpy = "*"
 scipy = "*"
+geost = "*"
 pandas = "*"
 geopandas = "*"
 rioxarray = "*"
@@ -38,7 +39,6 @@ radon = "*"
 
 [pypi-dependencies]
 wakatools = { path = ".", editable = true }
-geost = "*"
 
 [feature.py313.dependencies]
 python = "3.13.*"

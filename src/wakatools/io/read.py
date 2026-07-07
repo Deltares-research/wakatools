@@ -67,7 +67,7 @@ def read_borehole_xml(
     files: str | Path | Iterable[str | Path],
     type_: BoreholeType = "geotechnical",
     **kwargs,
-) -> geost.BoreholeCollection:
+) -> geost.Collection:
     """
     Read XML files containing borehole information. The type of data can be one of
     "geotechnical", "geological", or "pedological" borehole XML files.
@@ -91,8 +91,8 @@ def read_borehole_xml(
 
     Returns
     -------
-    `geost.BoreholeCollection`
-        GeoST BoreholeCollection containing the borehole data.
+    `geost.Collection`
+        GeoST Collection containing the borehole data.
 
     Raises
     ------

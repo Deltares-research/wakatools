@@ -25,7 +25,7 @@ def test_read_seismics(file, request, testdatadir):
 def test_read_borehole_xml(testdatadir):
     files = testdatadir.glob("87078_HB*.xml")
     cores = read.read_borehole_xml(files, type_="geotechnical", company="Wiertsema")
-    assert isinstance(cores, geost.BoreholeCollection)
+    assert isinstance(cores, geost.Collection)
     assert len(cores) == 2
 
     with pytest.raises(ValueError, match="Unsupported borehole type: unsupported_type"):
@@ -38,7 +38,7 @@ def test_read_borehole_xml(testdatadir):
 def test_bro_cpts_in(buffer, ncpts):
     bbox = (132781.52, 448029.34, 132783.52, 448031.34)
     cpts = read.bro_cpts_in(bbox=bbox, buffer=buffer)
-    assert isinstance(cpts, geost.CptCollection)
+    assert isinstance(cpts, geost.Collection)
     assert len(cpts) == ncpts
 
 
@@ -48,7 +48,7 @@ def test_bro_cpts_in(buffer, ncpts):
 def test_bro_bhrgt_in(buffer, nbhrgt):
     bbox = (132780.327, 448030.0, 132782.327, 448032.1)
     bhrgt = read.bro_bhrgt_in(bbox=bbox, buffer=buffer)
-    assert isinstance(bhrgt, geost.BoreholeCollection)
+    assert isinstance(bhrgt, geost.Collection)
     assert len(bhrgt) == nbhrgt
 
 
@@ -58,5 +58,5 @@ def test_bro_bhrgt_in(buffer, nbhrgt):
 def test_bro_bhrg_in(buffer, nbhrg):
     bbox = (126148, 452161, 126150, 452163)
     bhrg = read.bro_bhrg_in(bbox=bbox, buffer=buffer)
-    assert isinstance(bhrg, geost.BoreholeCollection)
+    assert isinstance(bhrg, geost.Collection)
     assert len(bhrg) == nbhrg

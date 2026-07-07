@@ -92,7 +92,7 @@ class DataFrameAccessor:
             An array of raster values corresponding to the DataFrame coordinates.
 
         """
-        from geost.spatial import get_raster_values
+        from geost.utils.spatial import get_raster_values
 
         return get_raster_values(self._df["x"], self._df["y"], raster)
 
